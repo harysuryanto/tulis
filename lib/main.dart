@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.only(left: 10),
                         alignment: Alignment.centerLeft,
-                        child: const Text('✍️ Tulis'),
+                        child: const Text('✍️ Tulis — by Hary Suryanto'),
                       ),
                     ),
                   ),
