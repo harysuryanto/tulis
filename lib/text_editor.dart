@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'helper.dart';
 
@@ -11,21 +14,36 @@ class TextEditor extends StatefulWidget {
 }
 
 class _TextEditorState extends State<TextEditor> {
-  final _focusNode = FocusNode();
-  final _controller = QuillController.basic();
-  final _readOnly = false;
+  late final QuillController _quillController;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
 
-    /// Load last document from storage
-    // _controller.document.insert(0, data);
+    // Load document from storage
+    Box box = Hive.box('myBox');
+    if (box.get('document') != null) {
+      var json = jsonDecode(box.get('document')!);
+      _quillController = QuillController(
+        document: Document.fromJson(json),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    } else {
+      _quillController = QuillController.basic();
+    }
+
+    // Save document to storage on value change
+    _quillController.addListener(() {
+      String json = jsonEncode(_quillController.document.toDelta().toJson());
+      box.put('document', json);
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _quillController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -40,7 +58,8 @@ class _TextEditorState extends State<TextEditor> {
             isDesktop ? VerticalDirection.down : VerticalDirection.up,
         children: [
           QuillToolbar.basic(
-            controller: _controller,
+            controller: _quillController,
+            afterButtonPressed: _focusNode.requestFocus,
             toolbarIconAlignment: WrapAlignment.start,
             dialogTheme: QuillDialogTheme(
               dialogBackgroundColor: Colors.transparent,
@@ -70,16 +89,12 @@ class _TextEditorState extends State<TextEditor> {
           ),
           Expanded(
             child: QuillEditor(
-              onTapDown: (details, p1) {
-                // Save document to storage
-                return false;
-              },
-              controller: _controller,
+              controller: _quillController,
               scrollController: ScrollController(),
               scrollable: true,
               focusNode: _focusNode,
-              autoFocus: true,
-              readOnly: _readOnly,
+              autoFocus: false,
+              readOnly: false,
               expands: false,
               padding: const EdgeInsets.symmetric(vertical: 20),
               placeholder: 'Write here...',

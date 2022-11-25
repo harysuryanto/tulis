@@ -1,12 +1,16 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'helper.dart';
 import 'text_editor.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await Hive.openBox('myBox');
 
   if (isDesktop) {
     await Window.initialize();
