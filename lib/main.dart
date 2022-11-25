@@ -13,7 +13,7 @@ Future<void> main() async {
     await Window.hideWindowControls();
     await Window.setEffect(
       effect: WindowEffect.acrylic,
-      color: const Color.fromRGBO(0, 27, 38, .5),
+      color: const Color.fromRGBO(0, 27, 38, .1),
     );
   }
 
@@ -21,8 +21,7 @@ Future<void> main() async {
 
   if (isDesktop) {
     doWhenWindowReady(() {
-      appWindow.size = const Size(500, 600);
-      appWindow.minSize = const Size(300, 300);
+      appWindow.minSize = const Size(400, 400);
       appWindow.title = 'Tulis';
       appWindow.show();
     });
@@ -36,6 +35,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return FluentApp(
       theme: ThemeData(
+        brightness: Brightness.dark,
+        accentColor: Colors.blue,
         borderInputColor: Colors.transparent,
       ),
       title: 'Tulis',
@@ -51,10 +52,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return PageWrapper(
       child: Column(
         children: [
-          if (isDesktop)
+          if (isDesktop) ...[
             WindowTitleBarBox(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -83,12 +84,30 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 10),
+          ],
           const Expanded(child: TextEditor()),
 
           // Prevent content blocked by virtual keyboard
           SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
         ],
       ),
+    );
+  }
+}
+
+class PageWrapper extends StatelessWidget {
+  const PageWrapper({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: child,
     );
   }
 }
