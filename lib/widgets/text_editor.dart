@@ -4,7 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'helper.dart';
+import '../helper.dart';
 
 class TextEditor extends StatefulWidget {
   const TextEditor({super.key});
