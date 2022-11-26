@@ -110,8 +110,6 @@ class PageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: child,
-    );
+    return child;
   }
 }
