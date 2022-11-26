@@ -56,9 +56,8 @@ class _TextEditorState extends State<TextEditor> {
         verticalDirection:
             isDesktop ? VerticalDirection.down : VerticalDirection.up,
         children: [
-          const SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: QuillToolbar.basic(
               controller: _quillController,
               afterButtonPressed: _focusNode.requestFocus,
@@ -90,35 +89,19 @@ class _TextEditorState extends State<TextEditor> {
               showLink: false,
             ),
           ),
-          const SizedBox(height: 10),
           Expanded(
-            child: Padding(
-              // Give space to ease access to dragging scrollbar on desktop platform
-              padding: EdgeInsets.only(right: isDesktop ? 10 : 0),
-              child: SingleChildScrollView(
-                padding: isDesktop
-                    ? const EdgeInsets.only(
-                        top: 10,
-                        bottom: 30,
-                      )
-                    : EdgeInsets.only(
-                        top: 30 + MediaQuery.of(context).viewPadding.top,
-                        bottom: 10,
-                      ),
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.text,
-                  child: QuillEditor(
-                    controller: _quillController,
-                    scrollController: ScrollController(),
-                    scrollable: false,
-                    focusNode: _focusNode,
-                    autoFocus: false,
-                    readOnly: false,
-                    expands: false,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    placeholder: 'Write here...',
-                  ),
-                ),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.text,
+              child: QuillEditor(
+                controller: _quillController,
+                scrollController: ScrollController(),
+                focusNode: _focusNode,
+                autoFocus: false,
+                readOnly: false,
+                scrollable: true,
+                expands: false,
+                padding: const EdgeInsets.all(20),
+                placeholder: 'Write here...',
               ),
             ),
           ),

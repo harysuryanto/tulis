@@ -47,7 +47,7 @@ class ScreenWrapper extends StatelessWidget {
             ),
           ),
         ],
-        Expanded(child: child),
+        Expanded(child: SafeArea(child: child)),
       ],
     );
   }
