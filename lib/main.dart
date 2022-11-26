@@ -25,7 +25,7 @@ Future<void> main() async {
 
   if (isDesktop) {
     doWhenWindowReady(() {
-      appWindow.minSize = const Size(400, 400);
+      appWindow.minSize = const Size(450, 500);
       appWindow.title = '✍️ Tulis — by Hary Suryanto';
       appWindow.show();
     });
