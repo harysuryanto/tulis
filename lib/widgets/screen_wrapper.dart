@@ -46,7 +46,6 @@ class ScreenWrapper extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 10),
         ],
         Expanded(child: child),
       ],
