@@ -22,10 +22,12 @@ class ScreenWrapper extends StatelessWidget {
                 Expanded(
                   child: MoveWindow(
                     child: Container(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       color: Colors.transparent,
-                      padding: const EdgeInsets.only(left: 10),
-                      child: const Text('✍️ Tulis — by Hary Suryanto'),
+                      // To make title centered
+                      padding: EdgeInsets.only(
+                          left: appWindow.titleBarButtonSize.width * 3),
+                      child: const Text('✍️ Tulis — by Hary'),
                     ),
                   ),
                 ),
