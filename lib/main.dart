@@ -26,7 +26,7 @@ Future<void> main() async {
   if (isDesktop) {
     doWhenWindowReady(() {
       appWindow.minSize = const Size(400, 400);
-      appWindow.title = 'Tulis';
+      appWindow.title = '✍️ Tulis — by Hary Suryanto';
       appWindow.show();
     });
   }
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.blue,
         borderInputColor: Colors.transparent,
       ),
-      title: 'Tulis',
+      title: '✍️ Tulis — by Hary Suryanto',
       home: const HomeScreen(),
     );
   }
