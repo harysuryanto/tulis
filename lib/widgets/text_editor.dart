@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../constants/hive_box_keys.dart';
 import '../helper.dart';
 
 class TextEditor extends StatefulWidget {
@@ -23,8 +24,9 @@ class _TextEditorState extends State<TextEditor> {
 
     // Load document from storage
     Box box = Hive.box('myBox');
-    if (box.get('document') != null) {
-      var json = jsonDecode(box.get('document')!);
+    final documentFromStorage = box.get(HiveBoxKeys.document);
+    if (documentFromStorage != null) {
+      var json = jsonDecode(documentFromStorage!);
       _quillController = QuillController(
         document: Document.fromJson(json),
         selection: const TextSelection.collapsed(offset: 0),
@@ -36,7 +38,7 @@ class _TextEditorState extends State<TextEditor> {
     // Save document to storage on value change
     _quillController.addListener(() {
       String json = jsonEncode(_quillController.document.toDelta().toJson());
-      box.put('document', json);
+      box.put(HiveBoxKeys.document, json);
     });
   }
 
