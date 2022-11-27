@@ -1,13 +1,18 @@
 # ✍️ Tulis
 
 A Notepad on steroid 💪
-![image](https://user-images.githubusercontent.com/17674038/204127779-8c65119f-a84e-43a0-a36a-fa4a5da8b42d.png)
 
 ## Features
 - Rich text editor
 - Continue with last text document (no need to press Save!)
 - Light and fast ⚡
 - Beautiful design
+
+## Screenshots
+
+| Windows | Android |
+| --- | --- |
+| ![image](https://user-images.githubusercontent.com/17674038/204127779-8c65119f-a84e-43a0-a36a-fa4a5da8b42d.png) | uploading... |
 
 ## Compatibility
 Supported on:
@@ -16,7 +21,7 @@ Supported on:
 - iOS (not tested)
 
 ## Download
-Download [here](https://github.com/harysuryanto/tulis/releases)
+Download [here](https://github.com/harysuryanto/tulis/releases).
 
 ## Upcoming Features
 - [x] Restore previous window size
