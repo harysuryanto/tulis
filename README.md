@@ -1,16 +1,22 @@
-# tulis
+# ✍️ Tulis
 
-A new Flutter project.
+A Notepad on steroid 💪
 
-## Getting Started
+## Compatibility
+Supported on:
+- Android - [Download apk](https://github.com/harysuryanto/tulis/files/10097916/Tulis.v1.0.0.apk.zip)
+- Windows - [Download exe](https://github.com/harysuryanto/tulis/files/10097906/Tulis.v1.0.0.zip)
+- iOS (not tested)
 
-This project is a starting point for a Flutter application.
+![image](https://user-images.githubusercontent.com/17674038/204127779-8c65119f-a84e-43a0-a36a-fa4a5da8b42d.png)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Upcoming Features
+- [ ] Restore previous window size
+- [ ] Restore previous window position
+- [ ] Zoon in/out with keyboard shortcut
+- [ ] Export and import a document
+- [ ] Insert images
+- [ ] Settings
+  - [ ] Show/hide toolbar
+  - [ ] Change theme
+  - [ ] Change accent color
