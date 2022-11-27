@@ -20,8 +20,9 @@ Supported on:
 - [x] Restore previous window position
 - [ ] Zoon in/out with keyboard shortcut
 - [ ] Export and import a document
-- [ ] Insert images
 - [ ] Settings
   - [ ] Show/hide toolbar
   - [ ] Change theme
   - [ ] Change accent color
+- [ ] Insert images
+- [ ] Sticky note
