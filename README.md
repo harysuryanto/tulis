@@ -6,7 +6,7 @@ A Notepad on steroid 💪
 - Rich text editor
 - Continue with last text document (no need to press Save!)
 - Light and fast ⚡
-- Beautiful design
+- Simple and eautiful UI
 
 ## Screenshots
 
