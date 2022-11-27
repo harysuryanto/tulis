@@ -53,6 +53,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
     windowManager.addListener(this);
 
     restoreWindowSize();
+    restoreWindowPosition();
   }
 
   @override
@@ -64,6 +65,11 @@ class _MyAppState extends State<MyApp> with WindowListener {
   @override
   void onWindowResize() {
     saveWindowSize();
+  }
+
+  @override
+  void onWindowMove() {
+    saveWindowPosition();
   }
 
   Future<void> restoreWindowSize() async {
@@ -85,6 +91,28 @@ class _MyAppState extends State<MyApp> with WindowListener {
     };
     String json = jsonEncode(sizeInMap);
     box.put(HiveBoxKeys.windowSize, json);
+  }
+
+  Future<void> restoreWindowPosition() async {
+    final windowPositionFromStorage = box.get(HiveBoxKeys.windowPosition);
+    if (windowPositionFromStorage != null) {
+      final windowPositionInMap = jsonDecode(windowPositionFromStorage);
+      final position = Offset(
+        windowPositionInMap['dx'],
+        windowPositionInMap['dy'],
+      );
+      await windowManager.setPosition(position);
+    }
+  }
+
+  Future<void> saveWindowPosition() async {
+    final position = await windowManager.getPosition();
+    final Map<String, double> positionInMap = {
+      'dx': position.dx,
+      'dy': position.dy,
+    };
+    String json = jsonEncode(positionInMap);
+    box.put(HiveBoxKeys.windowPosition, json);
   }
 
   @override
