@@ -32,5 +32,5 @@ Download [here](https://github.com/harysuryanto/tulis/releases).
   - [ ] Show/hide toolbar
   - [ ] Change theme
   - [ ] Change accent color
-- [ ] Insert images mode
-- [ ] Sticky note
+- [ ] Insert images
+- [ ] Sticky note mode
