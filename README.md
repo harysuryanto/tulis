@@ -11,9 +11,12 @@ A Notepad on steroid 💪
 
 ## Compatibility
 Supported on:
-- Android - [Download apk](https://github.com/harysuryanto/tulis/files/10097916/Tulis.v1.0.0.apk.zip)
-- Windows - [Download exe](https://github.com/harysuryanto/tulis/files/10097906/Tulis.v1.0.0.zip)
+- Android
+- Windows
 - iOS (not tested)
+
+## Download
+Download [here](https://github.com/harysuryanto/tulis/releases)
 
 ## Upcoming Features
 - [x] Restore previous window size
