@@ -16,8 +16,8 @@ Supported on:
 - iOS (not tested)
 
 ## Upcoming Features
-- [ ] Restore previous window size
-- [ ] Restore previous window position
+- [x] Restore previous window size
+- [x] Restore previous window position
 - [ ] Zoon in/out with keyboard shortcut
 - [ ] Export and import a document
 - [ ] Insert images
