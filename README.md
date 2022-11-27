@@ -1,16 +1,11 @@
-# tulis
+# ✍️ Tulis
 
-A new Flutter project.
+A Notepad on steroid 💪
 
-## Getting Started
+## Compatibility
+Supported on:
+- Android
+- Windows
+- MacOS (not tested)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![image](https://user-images.githubusercontent.com/17674038/204127779-8c65119f-a84e-43a0-a36a-fa4a5da8b42d.png)
