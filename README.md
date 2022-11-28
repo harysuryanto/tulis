@@ -26,6 +26,7 @@ Download [here](https://github.com/harysuryanto/tulis/releases).
 ## Upcoming Features
 - [x] Restore previous window size
 - [x] Restore previous window position
+- [ ] Create and manage more than 1 document
 - [ ] Zoon in/out with keyboard shortcut
 - [ ] Export and import a document
 - [ ] Settings
