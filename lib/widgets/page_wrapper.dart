@@ -124,10 +124,12 @@ class _Pane extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: appWindow.titleBarButtonSize.height,
-              child: MoveWindow(),
-            ),
+            SizedBox(height: MediaQuery.of(context).viewPadding.top),
+            if (isDesktop)
+              SizedBox(
+                height: appWindow.titleBarButtonSize.height,
+                child: MoveWindow(),
+              ),
             const Text('Documents'),
             const Expanded(child: DocumentList()),
           ],
