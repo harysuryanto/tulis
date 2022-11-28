@@ -16,7 +16,7 @@ class WindowSize {
 
   Map<String, dynamic> toMap() {
     return {
-      'access_token': width,
+      'width': width,
       'height': height,
     };
   }
