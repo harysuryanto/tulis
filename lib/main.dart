@@ -6,6 +6,7 @@ import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:tulis/constants/hive_box_keys.dart';
 import 'package:tulis/helper.dart';
+import 'package:tulis/models/window_size.dart';
 import 'package:tulis/screens/home_screen.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -72,24 +73,18 @@ class _MyAppState extends State<MyApp> with WindowListener {
   }
 
   Future<void> restoreWindowSize() async {
-    final windowSizeFromStorage =
-        jsonDecode(box.get(HiveBoxKeys.windowSize) as String);
-    if (windowSizeFromStorage != null) {
-      final width = windowSizeFromStorage['width'] as double;
-      final height = windowSizeFromStorage['height'] as double;
-      final size = Size(width, height);
-      await windowManager.setSize(size);
-    }
+    final windowSizeFromStorage = box.get(HiveBoxKeys.windowSize) as String?;
+    final windowSize = WindowSize.fromMap(
+      jsonDecode(windowSizeFromStorage!) as Map<String, dynamic>,
+    );
+    await windowManager.setSize(Size(windowSize.width, windowSize.height));
   }
 
   Future<void> saveWindowSize() async {
     final size = await windowManager.getSize();
-    final Map<String, double> sizeInMap = {
-      'width': size.width,
-      'height': size.height,
-    };
-    final String json = jsonEncode(sizeInMap);
-    box.put(HiveBoxKeys.windowSize, json);
+    final windowSize =
+        WindowSize(width: size.width, height: size.height).toMap();
+    box.put(HiveBoxKeys.windowSize, jsonEncode(windowSize));
   }
 
   Future<void> restoreWindowPosition() async {
