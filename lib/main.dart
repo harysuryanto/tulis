@@ -4,11 +4,10 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:tulis/constants/hive_box_keys.dart';
+import 'package:tulis/helper.dart';
+import 'package:tulis/screens/home_screen.dart';
 import 'package:window_manager/window_manager.dart';
-
-import 'constants/hive_box_keys.dart';
-import 'helper.dart';
-import 'screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,12 +72,12 @@ class _MyAppState extends State<MyApp> with WindowListener {
   }
 
   Future<void> restoreWindowSize() async {
-    final windowSizeFromStorage = jsonDecode(box.get(HiveBoxKeys.windowSize));
+    final windowSizeFromStorage =
+        jsonDecode(box.get(HiveBoxKeys.windowSize) as String);
     if (windowSizeFromStorage != null) {
-      final size = Size(
-        windowSizeFromStorage['width'],
-        windowSizeFromStorage['height'],
-      );
+      final width = windowSizeFromStorage['width'] as double;
+      final height = windowSizeFromStorage['height'] as double;
+      final size = Size(width, height);
       await windowManager.setSize(size);
     }
   }
@@ -89,17 +88,18 @@ class _MyAppState extends State<MyApp> with WindowListener {
       'width': size.width,
       'height': size.height,
     };
-    String json = jsonEncode(sizeInMap);
+    final String json = jsonEncode(sizeInMap);
     box.put(HiveBoxKeys.windowSize, json);
   }
 
   Future<void> restoreWindowPosition() async {
-    final windowPositionFromStorage = box.get(HiveBoxKeys.windowPosition);
+    final windowPositionFromStorage =
+        box.get(HiveBoxKeys.windowPosition) as String?;
     if (windowPositionFromStorage != null) {
       final windowPositionInMap = jsonDecode(windowPositionFromStorage);
       final position = Offset(
-        windowPositionInMap['dx'],
-        windowPositionInMap['dy'],
+        windowPositionInMap['dx'] as double,
+        windowPositionInMap['dy'] as double,
       );
       await windowManager.setPosition(position);
     }
@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
       'dx': position.dx,
       'dy': position.dy,
     };
-    String json = jsonEncode(positionInMap);
+    final String json = jsonEncode(positionInMap);
     box.put(HiveBoxKeys.windowPosition, json);
   }
 

@@ -1,10 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
-
-import '../widgets/screen_wrapper.dart';
-import '../widgets/text_editor.dart';
+import 'package:tulis/widgets/screen_wrapper.dart';
+import 'package:tulis/widgets/text_editor.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

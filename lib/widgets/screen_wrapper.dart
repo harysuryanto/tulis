@@ -1,7 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-
-import '../helper.dart';
+import 'package:tulis/helper.dart';
 
 class ScreenWrapper extends StatelessWidget {
   const ScreenWrapper({
@@ -26,7 +25,8 @@ class ScreenWrapper extends StatelessWidget {
                       color: Colors.transparent,
                       // To make title centered
                       padding: EdgeInsets.only(
-                          left: appWindow.titleBarButtonSize.width * 3),
+                        left: appWindow.titleBarButtonSize.width * 3,
+                      ),
                       child: const Text('✍️ Tulis — by Hary'),
                     ),
                   ),

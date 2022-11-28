@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../constants/hive_box_keys.dart';
-import '../helper.dart';
+import 'package:tulis/constants/hive_box_keys.dart';
+import 'package:tulis/helper.dart';
 
 class TextEditor extends StatefulWidget {
   const TextEditor({super.key});
@@ -23,12 +22,11 @@ class _TextEditorState extends State<TextEditor> {
     super.initState();
 
     // Load document from storage
-    Box box = Hive.box('myBox');
-    final documentFromStorage = box.get(HiveBoxKeys.document);
+    final Box box = Hive.box('myBox');
+    final documentFromStorage = box.get(HiveBoxKeys.document) as String?;
     if (documentFromStorage != null) {
-      var json = jsonDecode(documentFromStorage!);
       _quillController = QuillController(
-        document: Document.fromJson(json),
+        document: Document.fromJson(jsonDecode(documentFromStorage) as List),
         selection: const TextSelection.collapsed(offset: 0),
       );
     } else {
@@ -37,7 +35,8 @@ class _TextEditorState extends State<TextEditor> {
 
     // Save document to storage on value change
     _quillController.addListener(() {
-      String json = jsonEncode(_quillController.document.toDelta().toJson());
+      final String json =
+          jsonEncode(_quillController.document.toDelta().toJson());
       box.put(HiveBoxKeys.document, json);
     });
   }
@@ -75,12 +74,10 @@ class _TextEditorState extends State<TextEditor> {
               showFontSize: false,
               showUndo: false,
               showRedo: false,
-              showAlignmentButtons: false,
               showBackgroundColorButton: false,
               showCenterAlignment: false,
               showClearFormat: false,
               showColorButton: false,
-              showDirection: false,
               showJustifyAlignment: false,
               showDividers: false,
               showSearchButton: false,
