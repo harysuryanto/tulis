@@ -2,6 +2,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tulis/helper.dart';
+import 'package:tulis/widgets/document_list.dart';
 
 class PageWrapper extends HookWidget {
   const PageWrapper({
@@ -118,15 +119,19 @@ class _Pane extends StatelessWidget {
     return AnimatedOpacity(
       opacity: isPaneExpanded ? 1 : 0,
       duration: const Duration(milliseconds: 200),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: appWindow.titleBarButtonSize.height,
-            child: MoveWindow(),
-          ),
-          const Text('This is pane'),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: appWindow.titleBarButtonSize.height,
+              child: MoveWindow(),
+            ),
+            const Text('Documents'),
+            const Expanded(child: DocumentList()),
+          ],
+        ),
       ),
     );
   }
