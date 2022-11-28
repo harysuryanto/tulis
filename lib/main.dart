@@ -9,7 +9,7 @@ import 'package:tulis/constants/hive_boxes.dart';
 import 'package:tulis/helper.dart';
 import 'package:tulis/models/window_position.dart';
 import 'package:tulis/models/window_size.dart';
-import 'package:tulis/screens/home_screen.dart';
+import 'package:tulis/pages/home_page.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
         borderInputColor: Colors.transparent,
       ),
       title: '✍️ Tulis — by Hary Suryanto',
-      home: const HomeScreen(),
+      home: const HomePage(),
     );
   }
 }

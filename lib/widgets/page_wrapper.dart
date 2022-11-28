@@ -2,8 +2,8 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:tulis/helper.dart';
 
-class ScreenWrapper extends StatelessWidget {
-  const ScreenWrapper({
+class PageWrapper extends StatelessWidget {
+  const PageWrapper({
     super.key,
     required this.child,
   });
