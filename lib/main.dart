@@ -6,6 +6,7 @@ import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:tulis/constants/hive_box_keys.dart';
 import 'package:tulis/helper.dart';
+import 'package:tulis/models/window_position.dart';
 import 'package:tulis/models/window_size.dart';
 import 'package:tulis/screens/home_screen.dart';
 import 'package:window_manager/window_manager.dart';
@@ -91,23 +92,19 @@ class _MyAppState extends State<MyApp> with WindowListener {
     final windowPositionFromStorage =
         box.get(HiveBoxKeys.windowPosition) as String?;
     if (windowPositionFromStorage != null) {
-      final windowPositionInMap = jsonDecode(windowPositionFromStorage);
-      final position = Offset(
-        windowPositionInMap['dx'] as double,
-        windowPositionInMap['dy'] as double,
+      final windowPosition = WindowPosition.fromMap(
+        jsonDecode(windowPositionFromStorage) as Map<String, dynamic>,
       );
-      await windowManager.setPosition(position);
+      await windowManager
+          .setPosition(Offset(windowPosition.dx, windowPosition.dy));
     }
   }
 
   Future<void> saveWindowPosition() async {
     final position = await windowManager.getPosition();
-    final Map<String, double> positionInMap = {
-      'dx': position.dx,
-      'dy': position.dy,
-    };
-    final String json = jsonEncode(positionInMap);
-    box.put(HiveBoxKeys.windowPosition, json);
+    final windowPosition =
+        WindowPosition(dx: position.dx, dy: position.dy).toMap();
+    box.put(HiveBoxKeys.windowPosition, jsonEncode(windowPosition));
   }
 
   @override
