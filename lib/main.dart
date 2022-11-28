@@ -5,6 +5,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:tulis/constants/hive_box_keys.dart';
+import 'package:tulis/constants/hive_boxes.dart';
 import 'package:tulis/helper.dart';
 import 'package:tulis/models/window_position.dart';
 import 'package:tulis/models/window_size.dart';
@@ -15,7 +16,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  await Hive.openBox('myBox');
+  await Hive.openBox(HiveBoxes.myBox);
 
   if (isDesktop) {
     await windowManager.ensureInitialized();
@@ -46,7 +47,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WindowListener {
-  Box box = Hive.box('myBox');
+  Box box = Hive.box(HiveBoxes.myBox);
 
   @override
   void initState() {

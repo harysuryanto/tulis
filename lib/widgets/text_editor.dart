@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tulis/constants/hive_box_keys.dart';
+import 'package:tulis/constants/hive_boxes.dart';
 import 'package:tulis/helper.dart';
 
 class TextEditor extends StatefulWidget {
@@ -22,7 +23,7 @@ class _TextEditorState extends State<TextEditor> {
     super.initState();
 
     // Load document from storage
-    final Box box = Hive.box('myBox');
+    final Box box = Hive.box(HiveBoxes.myBox);
     final documentFromStorage = box.get(HiveBoxKeys.document) as String?;
     if (documentFromStorage != null) {
       _quillController = QuillController(
