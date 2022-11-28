@@ -16,5 +16,4 @@ analyzer:
 # can be found at https://dart-lang.github.io/linter/lints/options/options.html
 linter:
   rules:
-    sort_constructors_first: true
     prefer_single_quotes: true
