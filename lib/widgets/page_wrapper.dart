@@ -27,11 +27,9 @@ class PageWrapper extends HookWidget {
           bottom: 0,
           child: AnimatedContainer(
             width: isPaneExpanded.value ? 200 : 0,
-            duration: Duration(milliseconds: isPaneExpanded.value ? 400 : 200),
-            curve: isPaneExpanded.value ? Curves.easeOutBack : Curves.easeOut,
-            color: isPaneExpanded.value
-                ? Colors.grey[200].withOpacity(.5)
-                : Colors.transparent,
+            duration: Duration(milliseconds: isPaneExpanded.value ? 1000 : 200),
+            curve: isPaneExpanded.value ? Curves.elasticOut : Curves.easeOut,
+            color: Colors.grey[200].withOpacity(.5),
           ),
         ),
         // Pane content
@@ -44,8 +42,8 @@ class PageWrapper extends HookWidget {
         ),
         // Main content
         AnimatedPositioned(
-          duration: Duration(milliseconds: isPaneExpanded.value ? 400 : 200),
-          curve: isPaneExpanded.value ? Curves.easeOutBack : Curves.easeOut,
+          duration: Duration(milliseconds: isPaneExpanded.value ? 1000 : 200),
+          curve: isPaneExpanded.value ? Curves.elasticOut : Curves.easeOut,
           left: isPaneExpanded.value ? 200 : 0,
           top: 0,
           right: 0,
