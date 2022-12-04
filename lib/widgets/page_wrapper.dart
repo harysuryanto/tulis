@@ -74,7 +74,10 @@ class PageWrapper extends HookWidget {
                             alignment: Alignment.centerLeft,
                             color: Colors.transparent,
                             padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: const Text('✍️ Tulis — by Hary'),
+                            child: const Text(
+                              '✍️ Tulis — by Hary',
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ),
