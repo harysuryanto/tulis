@@ -5,6 +5,7 @@ import 'package:tulis/widgets/document_list.dart';
 
 class Pane extends StatelessWidget {
   const Pane({
+    super.key,
     required this.isPaneExpanded,
   });
 
