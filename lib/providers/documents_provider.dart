@@ -5,7 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/models/document.dart';
 
 final documentsProvider = Provider((ref) => _documents);
-final selectedDocumentIdProvider = StateProvider<int?>((ref) => null);
+final selectedDocumentIdProvider = StateProvider<int?>((ref) {
+  return _documents.isNotEmpty ? _documents[0].id : null;
+});
 
 final _docExample = [
   {'insert': 'TODO Tulis'},
