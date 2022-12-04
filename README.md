@@ -18,7 +18,6 @@ A Notepad on steroid 💪
 Supported on:
 - Android
 - Windows
-- iOS (not tested)
 
 ## Download
 Download [here](https://github.com/harysuryanto/tulis/releases).
