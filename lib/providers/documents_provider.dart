@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:flutter_quill/flutter_quill.dart' as quill show Document;
+import 'package:flutter_quill/flutter_quill.dart' show Document;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tulis/models/document.dart';
+import 'package:tulis/models/text_document.dart';
 
 final documentsProvider = Provider((ref) => _documents);
 final selectedDocumentIdProvider = StateProvider<int?>((ref) {
@@ -37,18 +37,18 @@ final _docExample = [
   }
 ];
 
-final _documents = <Document>[
-  Document(
+final _documents = <TextDocument>[
+  TextDocument(
     id: Random().nextInt(1000),
     title: 'Today',
-    content: quill.Document.fromJson(_docExample),
+    content: Document.fromJson(_docExample),
     createAt: DateTime(2022, 11, 29, 02, 11),
     updatedAt: DateTime(2022, 11, 29, 03, 12),
   ),
-  Document(
+  TextDocument(
     id: Random().nextInt(1000),
     title: 'Yesterday',
-    content: quill.Document(),
+    content: Document(),
     createAt: DateTime(2021),
   ),
 ];

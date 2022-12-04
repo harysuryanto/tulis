@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tulis/models/document.dart';
+import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
 class DocumentList extends HookConsumerWidget {
@@ -25,7 +25,7 @@ class _MyListTile extends HookConsumerWidget {
     required this.data,
   });
 
-  final Document data;
+  final TextDocument data;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
