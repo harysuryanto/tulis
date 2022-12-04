@@ -21,43 +21,31 @@ class PageWrapper extends HookWidget {
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 400));
 
-    return Stack(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Pane background
-        Positioned(
-          left: 0,
-          top: 0,
-          bottom: 0,
-          child: AnimatedContainer(
-            width: isPaneExpanded.value ? paneWidth : 0,
-            duration: Duration(
-              milliseconds: isPaneExpanded.value
-                  ? paneExpandDuration
-                  : paneShrinkDuration,
-            ),
-            curve: isPaneExpanded.value ? Curves.elasticOut : Curves.easeOut,
-            color: Colors.grey[200].withOpacity(.5),
-          ),
-        ),
-        // Pane content
-        Positioned(
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: paneWidth,
-          child: Pane(isPaneExpanded: isPaneExpanded.value),
-        ),
-        // Main content
-        AnimatedPositioned(
+        // Pane
+        AnimatedContainer(
+          width: isPaneExpanded.value ? paneWidth : 0,
+          height: MediaQuery.of(context).size.height,
           duration: Duration(
             milliseconds:
                 isPaneExpanded.value ? paneExpandDuration : paneShrinkDuration,
           ),
           curve: isPaneExpanded.value ? Curves.elasticOut : Curves.easeOut,
-          left: isPaneExpanded.value ? paneWidth : 0,
-          top: 0,
-          right: 0,
-          bottom: 0,
+          color: Colors.grey[200].withOpacity(.5),
+          child: FittedBox(
+            fit: BoxFit.fitHeight,
+            alignment: Alignment.centerLeft,
+            child: LimitedBox(
+              maxWidth: paneWidth,
+              maxHeight: MediaQuery.of(context).size.height,
+              child: Pane(isExpanded: isPaneExpanded.value),
+            ),
+          ),
+        ),
+        // Main content
+        Expanded(
           child: Column(
             children: [
               if (isDesktop) ...[

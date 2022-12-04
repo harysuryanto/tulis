@@ -6,15 +6,15 @@ import 'package:tulis/widgets/document_list.dart';
 class Pane extends StatelessWidget {
   const Pane({
     super.key,
-    required this.isPaneExpanded,
+    required this.isExpanded,
   });
 
-  final bool isPaneExpanded;
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      opacity: isPaneExpanded ? 1 : 0,
+      opacity: isExpanded ? 1 : 0,
       duration: const Duration(milliseconds: 200),
       child: Padding(
         padding: const EdgeInsets.all(15),

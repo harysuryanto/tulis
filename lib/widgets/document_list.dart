@@ -74,8 +74,7 @@ class _MyListTile extends HookWidget {
     return MouseRegion(
       onEnter: (_) => isHovered.value = true,
       onExit: (_) => isHovered.value = false,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(isHovered.value ? .1 : 0),
           border: Border.all(
@@ -83,7 +82,10 @@ class _MyListTile extends HookWidget {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(data.title),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Text(data.title),
+        ),
       ),
     );
   }
