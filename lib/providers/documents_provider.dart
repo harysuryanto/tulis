@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_quill/flutter_quill.dart' show Document;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:tulis/models/text_document.dart';
 
 final documentsProvider = Provider((ref) => _documents);
@@ -40,15 +41,19 @@ final _docExample = [
 final _documents = <TextDocument>[
   TextDocument(
     id: Random().nextInt(1000),
-    title: 'Today',
+    title: _formatDate(DateTime(2022, 11, 29, 02, 11)),
     content: Document.fromJson(_docExample),
     createAt: DateTime(2022, 11, 29, 02, 11),
     updatedAt: DateTime(2022, 11, 29, 03, 12),
   ),
   TextDocument(
     id: Random().nextInt(1000),
-    title: 'Yesterday',
+    title: _formatDate(DateTime(2021)),
     content: Document(),
     createAt: DateTime(2021),
   ),
 ];
+
+String _formatDate(DateTime date) {
+  return DateFormat('MMM d, yyyy').format(date);
+}
