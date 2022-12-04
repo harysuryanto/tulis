@@ -12,7 +12,7 @@ import 'package:tulis/models/window_size.dart';
 import 'package:tulis/pages/home_page.dart';
 import 'package:window_manager/window_manager.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
