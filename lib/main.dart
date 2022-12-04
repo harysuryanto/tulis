@@ -4,6 +4,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/constants/hive_box_keys.dart';
 import 'package:tulis/constants/hive_boxes.dart';
 import 'package:tulis/helper.dart';
@@ -28,7 +29,7 @@ void main() async {
     );
   }
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 
   if (isDesktop) {
     doWhenWindowReady(() {

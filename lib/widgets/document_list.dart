@@ -1,66 +1,26 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill hide Text;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/models/document.dart';
+import 'package:tulis/providers/documents_provider.dart';
 
-final _docExample = [
-  {'insert': 'TODO Tulis'},
-  {
-    'insert': '\n',
-    'attributes': {'header': 3}
-  },
-  {'insert': 'Rename screen to page'},
-  {
-    'insert': '\n',
-    'attributes': {'list': 'checked'}
-  },
-  {'insert': 'Create models for'},
-  {
-    'insert': '\n',
-    'attributes': {'list': 'checked'}
-  },
-  {'insert': 'Window size'},
-  {
-    'insert': '\n',
-    'attributes': {'list': 'checked', 'indent': 1}
-  },
-  {'insert': 'Window position'},
-  {
-    'insert': '\n',
-    'attributes': {'list': 'checked', 'indent': 1}
-  }
-];
-
-final _documents = <Document>[
-  Document(
-    title: 'Today',
-    content: quill.Document.fromJson(_docExample),
-    createAt: DateTime(2022, 11, 29, 02, 11),
-    updatedAt: DateTime(2022, 11, 29, 03, 12),
-  ),
-  Document(
-    title: 'Yesterday',
-    content: quill.Document(),
-    createAt: DateTime(2021),
-  ),
-];
-
-class DocumentList extends StatelessWidget {
+class DocumentList extends HookConsumerWidget {
   const DocumentList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final documents = ref.watch(documentsProvider);
     return ListView.builder(
       itemBuilder: (context, index) {
-        final data = _documents[index];
+        final data = documents[index];
         return _MyListTile(data: data);
       },
-      itemCount: _documents.length,
+      itemCount: documents.length,
     );
   }
 }
 
-class _MyListTile extends HookWidget {
+class _MyListTile extends HookConsumerWidget {
   const _MyListTile({
     required this.data,
   });
@@ -68,23 +28,38 @@ class _MyListTile extends HookWidget {
   final Document data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedDocumentId = ref.watch(selectedDocumentIdProvider);
     final isHovered = useState(false);
 
-    return MouseRegion(
-      onEnter: (_) => isHovered.value = true,
-      onExit: (_) => isHovered.value = false,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(isHovered.value ? .1 : 0),
-          border: Border.all(
-            color: Colors.white.withOpacity(isHovered.value ? .2 : 0),
+    void openDocument() {
+      ref
+          .read(selectedDocumentIdProvider.notifier)
+          .update((id) => id = data.id);
+    }
+
+    return GestureDetector(
+      onTap: openDocument,
+      child: MouseRegion(
+        onEnter: (_) => isHovered.value = true,
+        onExit: (_) => isHovered.value = false,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(isHovered.value ? .1 : 0),
+            border: Border.all(
+              color: Colors.white.withOpacity(isHovered.value ? .2 : 0),
+            ),
+            borderRadius: BorderRadius.circular(8),
           ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Text(data.title),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Text(
+              data.title,
+              style: data.id == selectedDocumentId
+                  ? const TextStyle(fontWeight: FontWeight.bold)
+                  : null,
+            ),
+          ),
         ),
       ),
     );

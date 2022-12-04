@@ -1,10 +1,11 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/helper.dart';
 import 'package:tulis/widgets/pane.dart';
 
-class PageWrapper extends HookWidget {
+class PageWrapper extends HookConsumerWidget {
   const PageWrapper({
     super.key,
     required this.child,
@@ -13,7 +14,7 @@ class PageWrapper extends HookWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const double paneWidth = 200;
     const int paneExpandDuration = 1000;
     const int paneShrinkDuration = 200;
