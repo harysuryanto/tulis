@@ -14,6 +14,9 @@ class PageWrapper extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double paneWidth = 200;
+    const int paneExpandDuration = 1000;
+    const int paneShrinkDuration = 200;
     final isPaneExpanded = useState(true);
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 400));
@@ -26,8 +29,12 @@ class PageWrapper extends HookWidget {
           top: 0,
           bottom: 0,
           child: AnimatedContainer(
-            width: isPaneExpanded.value ? 200 : 0,
-            duration: Duration(milliseconds: isPaneExpanded.value ? 1000 : 200),
+            width: isPaneExpanded.value ? paneWidth : 0,
+            duration: Duration(
+              milliseconds: isPaneExpanded.value
+                  ? paneExpandDuration
+                  : paneShrinkDuration,
+            ),
             curve: isPaneExpanded.value ? Curves.elasticOut : Curves.easeOut,
             color: Colors.grey[200].withOpacity(.5),
           ),
@@ -37,14 +44,17 @@ class PageWrapper extends HookWidget {
           left: 0,
           top: 0,
           bottom: 0,
-          width: 200,
+          width: paneWidth,
           child: _Pane(isPaneExpanded: isPaneExpanded.value),
         ),
         // Main content
         AnimatedPositioned(
-          duration: Duration(milliseconds: isPaneExpanded.value ? 1000 : 200),
+          duration: Duration(
+            milliseconds:
+                isPaneExpanded.value ? paneExpandDuration : paneShrinkDuration,
+          ),
           curve: isPaneExpanded.value ? Curves.elasticOut : Curves.easeOut,
-          left: isPaneExpanded.value ? 200 : 0,
+          left: isPaneExpanded.value ? paneWidth : 0,
           top: 0,
           right: 0,
           bottom: 0,
