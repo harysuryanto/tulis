@@ -1,17 +1,36 @@
-# tulis
+# ✍️ Tulis
 
-A new Flutter project.
+A Notepad on steroid 💪
 
-## Getting Started
+## Features
+- Rich text editor
+- Continue with last text document (no need to press Save!)
+- Light and fast ⚡
+- Simple and eautiful UI
 
-This project is a starting point for a Flutter application.
+## Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+| Windows | Android |
+| --- | --- |
+| ![image](https://user-images.githubusercontent.com/17674038/204127779-8c65119f-a84e-43a0-a36a-fa4a5da8b42d.png) | ![image](https://user-images.githubusercontent.com/17674038/204132757-aad31ac0-9e51-468b-9f72-bd1762113d28.jpg) |
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Compatibility
+Supported on:
+- Android
+- Windows
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Download
+Download [here](https://github.com/harysuryanto/tulis/releases).
+
+## Upcoming Features
+- [x] Restore previous window size
+- [x] Restore previous window position
+- [ ] Create and manage more than 1 document
+- [ ] Zoon in/out with keyboard shortcut
+- [ ] Export and import a document
+- [ ] Settings
+  - [ ] Show/hide toolbar
+  - [ ] Change theme
+  - [ ] Change accent color
+- [ ] Insert images
+- [ ] Sticky note mode
