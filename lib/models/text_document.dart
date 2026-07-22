@@ -8,6 +8,7 @@ class TextDocument {
   final Document content;
   final DateTime createAt;
   final DateTime? updatedAt;
+  final DateTime? deletedAt;
 
   const TextDocument({
     required this.id,
@@ -15,6 +16,7 @@ class TextDocument {
     required this.content,
     required this.createAt,
     this.updatedAt,
+    this.deletedAt,
   });
 
   TextDocument copyWith({
@@ -24,6 +26,8 @@ class TextDocument {
     DateTime? createAt,
     DateTime? updatedAt,
     bool clearUpdatedAt = false,
+    DateTime? deletedAt,
+    bool clearDeletedAt = false,
   }) {
     return TextDocument(
       id: id ?? this.id,
@@ -31,6 +35,7 @@ class TextDocument {
       content: content ?? this.content,
       createAt: createAt ?? this.createAt,
       updatedAt: clearUpdatedAt ? null : (updatedAt ?? this.updatedAt),
+      deletedAt: clearDeletedAt ? null : (deletedAt ?? this.deletedAt),
     );
   }
 
@@ -41,6 +46,7 @@ class TextDocument {
       'content': content.toDelta().toJson(),
       'createAt': createAt.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
+      'deletedAt': deletedAt?.toIso8601String(),
     };
   }
 
@@ -62,11 +68,14 @@ class TextDocument {
       updatedAt: json['updatedAt'] != null
           ? DateTime.parse(json['updatedAt'] as String)
           : null,
+      deletedAt: json['deletedAt'] != null
+          ? DateTime.parse(json['deletedAt'] as String)
+          : null,
     );
   }
 
   @override
   String toString() {
-    return 'TextDocument(id: $id, title: $title, content: $content, createAt: $createAt, updatedAt: $updatedAt)';
+    return 'TextDocument(id: $id, title: $title, content: $content, createAt: $createAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
 }

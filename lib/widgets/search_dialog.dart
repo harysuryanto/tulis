@@ -42,6 +42,7 @@ class SearchDialog extends HookConsumerWidget {
 
     final filteredDocs =
         documents.values.where((doc) {
+          if (doc.deletedAt != null) return false;
           if (query.isEmpty) return true;
           final titleMatches = doc.title.toLowerCase().contains(query);
           final bodyMatches = doc.content.toPlainText().toLowerCase().contains(

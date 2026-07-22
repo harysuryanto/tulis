@@ -24,10 +24,16 @@ class HomePage extends ConsumerWidget {
         ? NotionColors.darkActive
         : NotionColors.lightActive;
 
+    final nonTrashedDocs = documents.values
+        .where((d) => d.deletedAt == null)
+        .toList();
+    final hasActiveDoc =
+        selectedDocumentId != null &&
+        documents.containsKey(selectedDocumentId) &&
+        documents[selectedDocumentId]!.deletedAt == null;
+
     Widget content;
-    if (documents.isEmpty ||
-        selectedDocumentId == null ||
-        !documents.containsKey(selectedDocumentId)) {
+    if (nonTrashedDocs.isEmpty || !hasActiveDoc) {
       content = Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

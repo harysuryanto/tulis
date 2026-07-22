@@ -132,6 +132,47 @@ void createNewDocument(WidgetRef ref) {
 void deleteDocument(WidgetRef ref, int id) {
   final docsNotifier = ref.read(documentsProvider.notifier);
   docsNotifier.update((state) {
+    if (!state.containsKey(id)) return state;
+    final oldDoc = state[id]!;
+    final updated = oldDoc.copyWith(deletedAt: DateTime.now());
+    final newState = <int, TextDocument>{...state, id: updated};
+    saveDocumentsToHive(newState);
+    return newState;
+  });
+
+  final currentSelected = ref.read(selectedDocumentIdProvider);
+  if (currentSelected == id) {
+    final remaining = ref.read(documentsProvider);
+    final nonTrashed = remaining.values
+        .where((d) => d.deletedAt == null)
+        .toList();
+    ref.read(selectedDocumentIdProvider.notifier).state = nonTrashed.isNotEmpty
+        ? nonTrashed.first.id
+        : null;
+  }
+}
+
+void restoreDocument(WidgetRef ref, int id) {
+  restoreDocumentContainer(ref.container, id);
+}
+
+void restoreDocumentContainer(ProviderContainer container, int id) {
+  final docsNotifier = container.read(documentsProvider.notifier);
+  docsNotifier.update((state) {
+    if (!state.containsKey(id)) return state;
+    final oldDoc = state[id]!;
+    final updated = oldDoc.copyWith(clearDeletedAt: true);
+    final newState = <int, TextDocument>{...state, id: updated};
+    saveDocumentsToHive(newState);
+    return newState;
+  });
+  final selectedNotifier = container.read(selectedDocumentIdProvider.notifier);
+  selectedNotifier.state = id;
+}
+
+void permanentDeleteDocument(WidgetRef ref, int id) {
+  final docsNotifier = ref.read(documentsProvider.notifier);
+  docsNotifier.update((state) {
     final copy = Map<int, TextDocument>.from(state);
     copy.remove(id);
     saveDocumentsToHive(copy);
@@ -141,8 +182,11 @@ void deleteDocument(WidgetRef ref, int id) {
   final currentSelected = ref.read(selectedDocumentIdProvider);
   if (currentSelected == id) {
     final remaining = ref.read(documentsProvider);
-    ref.read(selectedDocumentIdProvider.notifier).state = remaining.isNotEmpty
-        ? remaining.keys.first
+    final nonTrashed = remaining.values
+        .where((d) => d.deletedAt == null)
+        .toList();
+    ref.read(selectedDocumentIdProvider.notifier).state = nonTrashed.isNotEmpty
+        ? nonTrashed.first.id
         : null;
   }
 }
@@ -268,3 +312,16 @@ final _initialDefaultDocuments = <int, TextDocument>{
     createAt: DateTime(2021),
   ),
 };
+
+final isTrashModeProvider = StateProvider<bool>((ref) => false);
+
+final trashedDocumentsProvider = Provider<Map<int, TextDocument>>((ref) {
+  final documents = ref.watch(documentsProvider);
+  return Map.fromEntries(
+    documents.entries.where((e) => e.value.deletedAt != null),
+  );
+});
+
+final trashCountProvider = Provider<int>((ref) {
+  return ref.watch(trashedDocumentsProvider).length;
+});

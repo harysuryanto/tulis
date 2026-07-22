@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/constants/notion_theme.dart';
+import 'package:tulis/main.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
@@ -17,6 +19,7 @@ class DocumentList extends HookConsumerWidget {
 
     final filteredDocs =
         documents.values.where((doc) {
+          if (doc.deletedAt != null) return false;
           if (searchQuery.isEmpty) return true;
           final titleMatches = doc.title.toLowerCase().contains(searchQuery);
           final bodyMatches = doc.content.toPlainText().toLowerCase().contains(
@@ -140,7 +143,56 @@ class _DocumentTile extends HookConsumerWidget {
                   const SizedBox(width: 4),
                   InkWell(
                     borderRadius: BorderRadius.circular(4),
-                    onTap: () => deleteDocument(ref, document.id),
+                    onTap: () {
+                      final container = ref.container;
+                      final docTitle = document.title.isEmpty
+                          ? 'Untitled'
+                          : document.title;
+                      final docId = document.id;
+
+                      deleteDocument(ref, docId);
+
+                      Future.delayed(const Duration(milliseconds: 150), () {
+                        final messenger = scaffoldMessengerKey.currentState;
+                        if (messenger == null) return;
+                        messenger.clearSnackBars();
+
+                        Timer? autoDismissTimer;
+
+                        messenger.showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '"$docTitle" moved to trash',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                              ),
+                            ),
+                            duration: const Duration(seconds: 4),
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: isDark
+                                ? const Color(0xFF2C2C2C)
+                                : const Color(0xFF37352F),
+                            action: SnackBarAction(
+                              label: 'Restore',
+                              textColor: const Color(0xFF6EA8FE),
+                              onPressed: () {
+                                autoDismissTimer?.cancel();
+                                messenger.hideCurrentSnackBar();
+                                restoreDocumentContainer(container, docId);
+                              },
+                            ),
+                          ),
+                        );
+
+                        autoDismissTimer = Timer(
+                          const Duration(seconds: 4),
+                          () {
+                            messenger.hideCurrentSnackBar();
+                          },
+                        );
+                      });
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(2),
                       child: Icon(

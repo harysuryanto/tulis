@@ -17,6 +17,8 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
@@ -25,6 +27,7 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp(
+      scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       themeMode: themeMode,
       theme: NotionTheme.light,
