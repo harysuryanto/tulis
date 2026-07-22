@@ -108,9 +108,24 @@ class Sidebar extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             child: _SidebarItem(
-              icon: themeMode == ThemeMode.dark
-                  ? Icons.dark_mode_outlined
-                  : Icons.light_mode_outlined,
+              customIcon: AnimatedRotation(
+                turns: isDark ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOutCubic,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, anim) =>
+                      ScaleTransition(scale: anim, child: child),
+                  child: Icon(
+                    isDark
+                        ? Icons.dark_mode_outlined
+                        : Icons.light_mode_outlined,
+                    key: ValueKey(isDark),
+                    size: 16,
+                    color: textMuted,
+                  ),
+                ),
+              ),
               label: themeMode == ThemeMode.dark ? 'Dark Mode' : 'Light Mode',
               onTap: () {
                 toggleThemeMode(ref);
@@ -160,13 +175,15 @@ class Sidebar extends HookConsumerWidget {
 
 class _SidebarItem extends HookConsumerWidget {
   const _SidebarItem({
-    required this.icon,
+    this.icon,
+    this.customIcon,
     required this.label,
     this.onTap,
     this.shortcutHint,
   });
 
-  final IconData icon;
+  final IconData? icon;
+  final Widget? customIcon;
   final String label;
   final VoidCallback? onTap;
   final String? shortcutHint;
@@ -202,13 +219,14 @@ class _SidebarItem extends HookConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               children: [
-                Icon(
-                  icon,
-                  size: 16,
-                  color: isEnabled
-                      ? textMuted
-                      : textMuted.withValues(alpha: 0.38),
-                ),
+                customIcon ??
+                    Icon(
+                      icon,
+                      size: 16,
+                      color: isEnabled
+                          ? textMuted
+                          : textMuted.withValues(alpha: 0.38),
+                    ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(

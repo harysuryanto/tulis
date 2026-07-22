@@ -96,14 +96,16 @@ class TopBar extends HookConsumerWidget {
             ),
           ),
 
-          // Dark/Light Theme Toggle Button with AnimatedRotation & AnimatedSwitcher
+          // Dark/Light Theme Toggle Button
           _TopBarIconButton(
             customIcon: AnimatedRotation(
-              turns: isDark ? 0.5 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOutBack,
+              turns: isDark ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOutCubic,
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, anim) =>
+                    ScaleTransition(scale: anim, child: child),
                 child: Icon(
                   isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
                   key: ValueKey(isDark),
