@@ -54,6 +54,20 @@ class NotionSearchDialog extends HookConsumerWidget {
           return dateB.compareTo(dateA);
         });
 
+    final searchAnimController = useAnimationController(
+      duration: const Duration(milliseconds: 250),
+      initialValue: searchQuery.value.isNotEmpty ? 1.0 : 0.0,
+    );
+
+    useEffect(() {
+      if (searchQuery.value.isNotEmpty) {
+        searchAnimController.forward();
+      } else {
+        searchAnimController.reverse();
+      }
+      return null;
+    }, [searchQuery.value]);
+
     return CallbackShortcuts(
       bindings: {
         const SingleActivator(LogicalKeyboardKey.escape): () {
@@ -90,7 +104,12 @@ class NotionSearchDialog extends HookConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search, size: 18, color: textMuted),
+                    AnimatedIcon(
+                      icon: AnimatedIcons.search_ellipsis,
+                      progress: searchAnimController,
+                      size: 18,
+                      color: textMuted,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextField(

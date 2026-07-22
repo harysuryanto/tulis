@@ -19,7 +19,6 @@ class NotionTopBar extends HookConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final selectedId = ref.watch(selectedDocumentIdProvider);
     final documents = ref.watch(documentsProvider);
-    final themeMode = ref.watch(themeModeProvider);
 
     final selectedDoc = selectedId != null ? documents[selectedId] : null;
     final docTitle = selectedDoc?.title ?? 'Tulis';
@@ -31,14 +30,34 @@ class NotionTopBar extends HookConsumerWidget {
         ? NotionColors.darkTextMuted
         : NotionColors.lightTextMuted;
 
+    // Sidebar AnimatedIcon Controller
+    final sidebarAnimController = useAnimationController(
+      duration: const Duration(milliseconds: 250),
+      initialValue: isSidebarVisible ? 1.0 : 0.0,
+    );
+
+    useEffect(() {
+      if (isSidebarVisible) {
+        sidebarAnimController.forward();
+      } else {
+        sidebarAnimController.reverse();
+      }
+      return null;
+    }, [isSidebarVisible]);
+
     return Container(
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         children: [
-          // Sidebar Toggle Button
+          // Sidebar Toggle Button with AnimatedIcon (menu_close)
           _TopBarIconButton(
-            icon: Icons.view_sidebar_outlined,
+            customIcon: AnimatedIcon(
+              icon: AnimatedIcons.menu_close,
+              progress: sidebarAnimController,
+              size: 16,
+              color: textPrimary,
+            ),
             tooltip: isSidebarVisible ? 'Close sidebar' : 'Open sidebar',
             onPressed: onToggleSidebar,
           ),
@@ -75,19 +94,24 @@ class NotionTopBar extends HookConsumerWidget {
             ),
           ),
 
-          // Right action buttons
+          // Dark/Light Theme Toggle Button with AnimatedRotation & AnimatedSwitcher
           _TopBarIconButton(
-            icon: themeMode == ThemeMode.dark
-                ? Icons.light_mode_outlined
-                : Icons.dark_mode_outlined,
+            customIcon: AnimatedRotation(
+              turns: isDark ? 0.5 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutBack,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+                  key: ValueKey(isDark),
+                  size: 16,
+                  color: textPrimary,
+                ),
+              ),
+            ),
             tooltip: 'Toggle Theme',
-            onPressed: () {
-              ref
-                  .read(themeModeProvider.notifier)
-                  .state = themeMode == ThemeMode.dark
-                  ? ThemeMode.light
-                  : ThemeMode.dark;
-            },
+            onPressed: () => toggleThemeMode(ref),
           ),
           const SizedBox(width: 4),
           _TopBarIconButton(
@@ -103,12 +127,14 @@ class NotionTopBar extends HookConsumerWidget {
 
 class _TopBarIconButton extends HookConsumerWidget {
   const _TopBarIconButton({
-    required this.icon,
+    this.icon,
+    this.customIcon,
     required this.onPressed,
     this.tooltip,
   });
 
-  final IconData icon;
+  final IconData? icon;
+  final Widget? customIcon;
   final VoidCallback onPressed;
   final String? tooltip;
 
@@ -134,7 +160,7 @@ class _TopBarIconButton extends HookConsumerWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         child: IconButton(
-          icon: Icon(icon, size: 16, color: iconColor),
+          icon: customIcon ?? Icon(icon, size: 16, color: iconColor),
           onPressed: onPressed,
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(),
