@@ -122,15 +122,16 @@ class TextEditor extends HookConsumerWidget {
                         iconButtonFactor: 0.75,
                         afterButtonPressed: focusNode.requestFocus,
                       ),
-                      selectHeaderStyleDropdownButton: QuillToolbarSelectHeaderStyleDropdownButtonOptions(
-                        textStyle: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w500,
-                          color: textPrimary,
-                        ),
-                        iconSize: 14.0,
-                        iconButtonFactor: 0.8,
-                      ),
+                      selectHeaderStyleDropdownButton:
+                          QuillToolbarSelectHeaderStyleDropdownButtonOptions(
+                            textStyle: TextStyle(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w500,
+                              color: textPrimary,
+                            ),
+                            iconSize: 14.0,
+                            iconButtonFactor: 0.8,
+                          ),
                     ),
                   ),
                 ),
@@ -169,8 +170,7 @@ class TextEditor extends HookConsumerWidget {
                             autoFocus: false,
                             expands: true,
                             padding: EdgeInsets.zero,
-                            placeholder:
-                                "Write something, or type '/' for commands...",
+                            placeholder: "Write something...",
                             customStyles: DefaultStyles(
                               h1: DefaultTextBlockStyle(
                                 TextStyle(
