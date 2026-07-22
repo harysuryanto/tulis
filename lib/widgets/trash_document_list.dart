@@ -6,7 +6,9 @@ import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
 class TrashDocumentList extends HookConsumerWidget {
-  const TrashDocumentList({super.key});
+  const TrashDocumentList({super.key, this.onCloseDrawer});
+
+  final VoidCallback? onCloseDrawer;
 
   static const double itemHeight = 32.0;
 
@@ -46,7 +48,10 @@ class TrashDocumentList extends HookConsumerWidget {
                 left: 0,
                 right: 0,
                 height: itemHeight,
-                child: _TrashDocumentTile(document: sortedDocs[i]),
+                child: _TrashDocumentTile(
+                  document: sortedDocs[i],
+                  onCloseDrawer: onCloseDrawer,
+                ),
               ),
           ],
         ),
@@ -56,9 +61,10 @@ class TrashDocumentList extends HookConsumerWidget {
 }
 
 class _TrashDocumentTile extends HookConsumerWidget {
-  const _TrashDocumentTile({required this.document});
+  const _TrashDocumentTile({required this.document, this.onCloseDrawer});
 
   final TextDocument document;
+  final VoidCallback? onCloseDrawer;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -109,7 +115,10 @@ class _TrashDocumentTile extends HookConsumerWidget {
                 const SizedBox(width: 4),
                 InkWell(
                   borderRadius: BorderRadius.circular(4),
-                  onTap: () => restoreDocument(ref, document.id),
+                  onTap: () {
+                    restoreDocument(ref, document.id);
+                    onCloseDrawer?.call();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(2),
                     child: Icon(

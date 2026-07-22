@@ -211,8 +211,8 @@ class Sidebar extends HookConsumerWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: isTrashMode
-                        ? const TrashDocumentList()
-                        : const DocumentList(),
+                        ? TrashDocumentList(onCloseDrawer: onCloseDrawer)
+                        : DocumentList(onCloseDrawer: onCloseDrawer),
                   ),
                 ),
               ),
@@ -272,7 +272,10 @@ class Sidebar extends HookConsumerWidget {
                         icon: Icons.add,
                         label: 'New page',
                         onTap: canCreateNew
-                            ? () => createNewDocument(ref)
+                            ? () {
+                                createNewDocument(ref);
+                                onCloseDrawer?.call();
+                              }
                             : null,
                       ),
                     ),
@@ -356,7 +359,7 @@ class _SidebarItem extends HookConsumerWidget {
                       color: textMuted,
                     ),
                   ),
-                if (trailing != null) ...[trailing!],
+                ?trailing,
               ],
             ),
           ),

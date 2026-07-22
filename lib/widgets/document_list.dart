@@ -8,7 +8,9 @@ import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
 class DocumentList extends HookConsumerWidget {
-  const DocumentList({super.key});
+  const DocumentList({super.key, this.onCloseDrawer});
+
+  final VoidCallback? onCloseDrawer;
 
   static const double itemHeight = 32.0;
 
@@ -57,7 +59,10 @@ class DocumentList extends HookConsumerWidget {
                 left: 0,
                 right: 0,
                 height: itemHeight,
-                child: _DocumentTile(document: filteredDocs[i]),
+                child: _DocumentTile(
+                  document: filteredDocs[i],
+                  onCloseDrawer: onCloseDrawer,
+                ),
               ),
           ],
         ),
@@ -67,9 +72,10 @@ class DocumentList extends HookConsumerWidget {
 }
 
 class _DocumentTile extends HookConsumerWidget {
-  const _DocumentTile({required this.document});
+  const _DocumentTile({required this.document, this.onCloseDrawer});
 
   final TextDocument document;
+  final VoidCallback? onCloseDrawer;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -106,6 +112,7 @@ class _DocumentTile extends HookConsumerWidget {
           borderRadius: BorderRadius.circular(4),
           onTap: () {
             ref.read(selectedDocumentIdProvider.notifier).state = document.id;
+            onCloseDrawer?.call();
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
