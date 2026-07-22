@@ -18,6 +18,7 @@ class NotionSidebar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final themeMode = ref.watch(themeModeProvider);
+    final canCreateNew = ref.watch(canCreateNewDocumentProvider);
 
     final sidebarBg = isDark
         ? NotionColors.darkSidebar
@@ -152,7 +153,7 @@ class NotionSidebar extends HookConsumerWidget {
             child: _NotionSidebarItem(
               icon: Icons.add,
               label: 'New page',
-              onTap: () => createNewDocument(ref),
+              onTap: canCreateNew ? () => createNewDocument(ref) : null,
             ),
           ),
         ],
@@ -165,34 +166,37 @@ class _NotionSidebarItem extends HookConsumerWidget {
   const _NotionSidebarItem({
     required this.icon,
     required this.label,
-    required this.onTap,
+    this.onTap,
     this.shortcutHint,
   });
 
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String? shortcutHint;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isHovered = useState(false);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isEnabled = onTap != null;
 
     final hoverBg = isDark ? NotionColors.darkHover : NotionColors.lightHover;
     final textMuted = isDark
         ? NotionColors.darkTextMuted
         : NotionColors.lightTextMuted;
-    final textPrimary = isDark
-        ? NotionColors.darkTextPrimary
-        : NotionColors.lightTextPrimary;
+    final textPrimary = isEnabled
+        ? (isDark
+              ? NotionColors.darkTextPrimary
+              : NotionColors.lightTextPrimary)
+        : textMuted.withValues(alpha: 0.38);
 
     return MouseRegion(
-      onEnter: (_) => isHovered.value = true,
+      onEnter: (_) => isHovered.value = isEnabled,
       onExit: (_) => isHovered.value = false,
       child: Container(
         decoration: BoxDecoration(
-          color: isHovered.value ? hoverBg : Colors.transparent,
+          color: (isHovered.value && isEnabled) ? hoverBg : Colors.transparent,
           borderRadius: BorderRadius.circular(4),
         ),
         child: InkWell(
@@ -202,7 +206,13 @@ class _NotionSidebarItem extends HookConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               children: [
-                Icon(icon, size: 16, color: textMuted),
+                Icon(
+                  icon,
+                  size: 16,
+                  color: isEnabled
+                      ? textMuted
+                      : textMuted.withValues(alpha: 0.38),
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(

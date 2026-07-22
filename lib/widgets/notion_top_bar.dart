@@ -45,6 +45,8 @@ class NotionTopBar extends HookConsumerWidget {
       return null;
     }, [isSidebarVisible]);
 
+    final canCreateNew = ref.watch(canCreateNewDocumentProvider);
+
     return Container(
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -116,8 +118,8 @@ class NotionTopBar extends HookConsumerWidget {
           const SizedBox(width: 4),
           _TopBarIconButton(
             icon: Icons.add,
-            tooltip: 'New page',
-            onPressed: () => createNewDocument(ref),
+            tooltip: canCreateNew ? 'New page' : 'Untitled page already exists',
+            onPressed: canCreateNew ? () => createNewDocument(ref) : null,
           ),
         ],
       ),
@@ -129,34 +131,40 @@ class _TopBarIconButton extends HookConsumerWidget {
   const _TopBarIconButton({
     this.icon,
     this.customIcon,
-    required this.onPressed,
+    this.onPressed,
     this.tooltip,
   });
 
   final IconData? icon;
   final Widget? customIcon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String? tooltip;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isHovered = useState(false);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isEnabled = onPressed != null;
 
     final hoverBg = isDark ? NotionColors.darkHover : NotionColors.lightHover;
-    final iconColor = isDark
-        ? NotionColors.darkTextPrimary
-        : NotionColors.lightTextPrimary;
+    final textMuted = isDark
+        ? NotionColors.darkTextMuted
+        : NotionColors.lightTextMuted;
+    final iconColor = isEnabled
+        ? (isDark
+              ? NotionColors.darkTextPrimary
+              : NotionColors.lightTextPrimary)
+        : textMuted.withValues(alpha: 0.38);
 
     Widget button = MouseRegion(
-      onEnter: (_) => isHovered.value = true,
+      onEnter: (_) => isHovered.value = isEnabled,
       onExit: (_) => isHovered.value = false,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: 28,
         height: 28,
         decoration: BoxDecoration(
-          color: isHovered.value ? hoverBg : Colors.transparent,
+          color: (isHovered.value && isEnabled) ? hoverBg : Colors.transparent,
           borderRadius: BorderRadius.circular(4),
         ),
         child: IconButton(

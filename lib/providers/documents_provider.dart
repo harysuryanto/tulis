@@ -81,6 +81,22 @@ void toggleThemeMode(WidgetRef ref) {
   } catch (_) {}
 }
 
+bool hasUneditedUntitledDoc(Map<int, TextDocument> documents) {
+  return documents.values.any((doc) {
+    final isUntitled =
+        doc.title.trim().toLowerCase() == 'untitled' ||
+        doc.title.trim().isEmpty;
+    final isBodyEmpty = doc.content.toPlainText().trim().isEmpty;
+    final isNotUpdated = doc.updatedAt == null;
+    return isUntitled && isBodyEmpty && isNotUpdated;
+  });
+}
+
+final canCreateNewDocumentProvider = Provider<bool>((ref) {
+  final documents = ref.watch(documentsProvider);
+  return !hasUneditedUntitledDoc(documents);
+});
+
 final documentsProvider = StateProvider<Map<int, TextDocument>>(
   (ref) => _loadDocumentsFromHive(),
 );
@@ -93,6 +109,9 @@ final selectedDocumentIdProvider = StateProvider<int?>((ref) {
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
 void createNewDocument(WidgetRef ref) {
+  final documents = ref.read(documentsProvider);
+  if (hasUneditedUntitledDoc(documents)) return;
+
   final docsNotifier = ref.read(documentsProvider.notifier);
   final newId = DateTime.now().millisecondsSinceEpoch;
   final newDoc = TextDocument(
