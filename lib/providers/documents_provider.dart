@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter_quill/flutter_quill.dart' show Document;
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 import 'package:tulis/helper.dart';
 import 'package:tulis/models/text_document.dart';
 

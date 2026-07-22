@@ -52,9 +52,9 @@ class _MyListTile extends HookConsumerWidget {
         onExit: (_) => isHovered.value = false,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(isHovered.value ? .1 : 0),
+            color: Colors.white.withValues(alpha: isHovered.value ? .1 : 0),
             border: Border.all(
-              color: Colors.white.withOpacity(isHovered.value ? .2 : 0),
+              color: Colors.white.withValues(alpha: isHovered.value ? .2 : 0),
             ),
             borderRadius: BorderRadius.circular(8),
           ),

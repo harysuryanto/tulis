@@ -37,7 +37,7 @@ class PageWrapper extends HookConsumerWidget {
                   : paneShrinkDuration,
             ),
             curve: isPaneExpanded.value ? Curves.elasticOut : Curves.easeOut,
-            color: Colors.grey[200].withOpacity(.5),
+            color: Colors.grey[200].withValues(alpha: .5),
             child: FittedBox(
               fit: BoxFit.fitHeight,
               alignment: Alignment.centerLeft,

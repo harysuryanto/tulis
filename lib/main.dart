@@ -77,8 +77,9 @@ class _MyAppState extends State<MyApp> with WindowListener {
 
   Future<void> restoreWindowSize() async {
     final windowSizeFromStorage = box.get(HiveBoxKeys.windowSize) as String?;
+    if (windowSizeFromStorage == null) return; // no saved size yet on first run
     final windowSize = WindowSize.fromMap(
-      jsonDecode(windowSizeFromStorage!) as Map<String, dynamic>,
+      jsonDecode(windowSizeFromStorage) as Map<String, dynamic>,
     );
     await windowManager.setSize(Size(windowSize.width, windowSize.height));
   }
@@ -112,10 +113,9 @@ class _MyAppState extends State<MyApp> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return FluentApp(
-      theme: ThemeData(
+      theme: FluentThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.blue,
-        borderInputColor: Colors.transparent,
       ),
       title: '✍️ Tulis — by Hary Suryanto',
       home: const HomePage(),
