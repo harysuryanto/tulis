@@ -9,10 +9,7 @@ import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
 class TextEditor2 extends HookConsumerWidget {
-  const TextEditor2({
-    super.key,
-    required this.textDocument,
-  });
+  const TextEditor2({super.key, required this.textDocument});
 
   final TextDocument textDocument;
 
@@ -27,45 +24,44 @@ class TextEditor2 extends HookConsumerWidget {
     ).value;
     final selectedDocumentId = ref.read(selectedDocumentIdProvider);
 
-    useEffect(
-      () {
-        // Save document to storage on value changes
-        quillController.addListener(() {
-          focusNode.requestFocus();
-          final latestDocument = quillController.document;
-          log(latestDocument.toPlainText());
-          ref.read(documentsProvider.notifier).update((state) {
-            final oldDocument = {...state};
-            oldDocument.update(
-              selectedDocumentId!,
-              (value) => TextDocument(
-                id: value.id,
-                title: value.title,
-                content: Document.fromDelta(latestDocument.toDelta()),
-                createAt: value.createAt,
-                updatedAt: DateTime.now(),
-              ),
-            );
-            return oldDocument;
-          });
+    useEffect(() {
+      // Save document to storage on value changes
+      quillController.addListener(() {
+        focusNode.requestFocus();
+        final latestDocument = quillController.document;
+        log(latestDocument.toPlainText());
+        ref.read(documentsProvider.notifier).update((state) {
+          final oldDocument = {...state};
+          oldDocument.update(
+            selectedDocumentId!,
+            (value) => TextDocument(
+              id: value.id,
+              title: value.title,
+              content: Document.fromDelta(latestDocument.toDelta()),
+              createAt: value.createAt,
+              updatedAt: DateTime.now(),
+            ),
+          );
+          return oldDocument;
         });
-        return quillController.dispose;
-      },
-      [key],
-    );
+      });
+      return quillController.dispose;
+    }, [key]);
 
     return ColoredBox(
       color: isDesktop ? Colors.transparent : Colors.grey[180],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        verticalDirection:
-            isDesktop ? VerticalDirection.down : VerticalDirection.up,
+        verticalDirection: isDesktop
+            ? VerticalDirection.down
+            : VerticalDirection.up,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: QuillSimpleToolbar(
               controller: quillController,
               config: QuillSimpleToolbarConfig(
+                multiRowsDisplay: false,
                 toolbarIconAlignment: WrapAlignment.start,
                 showFontFamily: false,
                 showFontSize: false,
@@ -83,9 +79,7 @@ class TextEditor2 extends HookConsumerWidget {
                   iconButtonUnselectedData: const IconButtonData(
                     color: Colors.transparent,
                   ),
-                  iconButtonSelectedData: IconButtonData(
-                    color: Colors.blue,
-                  ),
+                  iconButtonSelectedData: IconButtonData(color: Colors.blue),
                 ),
                 buttonOptions: QuillSimpleToolbarButtonOptions(
                   base: QuillToolbarBaseButtonOptions(
@@ -117,10 +111,7 @@ class TextEditor2 extends HookConsumerWidget {
 }
 
 class TextEditor extends StatefulWidget {
-  const TextEditor({
-    super.key,
-    required this.textDocument,
-  });
+  const TextEditor({super.key, required this.textDocument});
 
   final TextDocument textDocument;
 
@@ -161,14 +152,16 @@ class _TextEditorState extends State<TextEditor> {
       color: isDesktop ? Colors.transparent : Colors.grey[180],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        verticalDirection:
-            isDesktop ? VerticalDirection.down : VerticalDirection.up,
+        verticalDirection: isDesktop
+            ? VerticalDirection.down
+            : VerticalDirection.up,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: QuillSimpleToolbar(
               controller: _quillController,
               config: QuillSimpleToolbarConfig(
+                multiRowsDisplay: false,
                 toolbarIconAlignment: WrapAlignment.start,
                 showFontFamily: false,
                 showFontSize: false,
@@ -186,9 +179,7 @@ class _TextEditorState extends State<TextEditor> {
                   iconButtonUnselectedData: const IconButtonData(
                     color: Colors.transparent,
                   ),
-                  iconButtonSelectedData: IconButtonData(
-                    color: Colors.blue,
-                  ),
+                  iconButtonSelectedData: IconButtonData(color: Colors.blue),
                 ),
                 buttonOptions: QuillSimpleToolbarButtonOptions(
                   base: QuillToolbarBaseButtonOptions(
