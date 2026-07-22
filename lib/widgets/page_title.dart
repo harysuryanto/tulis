@@ -7,9 +7,14 @@ import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
 class PageTitle extends HookConsumerWidget {
-  const PageTitle({super.key, required this.textDocument});
+  const PageTitle({
+    super.key,
+    required this.textDocument,
+    this.readOnly = false,
+  });
 
   final TextDocument textDocument;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,6 +45,8 @@ class PageTitle extends HookConsumerWidget {
         // Title Input Field
         TextField(
           controller: controller,
+          enabled: !readOnly,
+          readOnly: readOnly,
           onChanged: (val) {
             updateDocumentTitle(ref, textDocument.id, val);
           },

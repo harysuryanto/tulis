@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/constants/notion_theme.dart';
+import 'package:tulis/helper.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
@@ -85,68 +86,75 @@ class _TrashDocumentTile extends HookConsumerWidget {
           color: isHovered.value ? hoverColor : Colors.transparent,
           borderRadius: BorderRadius.circular(4),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Row(
-            children: [
-              Icon(
-                Icons.article_outlined,
-                size: 16,
-                color: isDark
-                    ? NotionColors.darkTextMuted
-                    : NotionColors.lightTextMuted,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  document.title.isEmpty ? 'Untitled' : document.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: isDark
-                        ? NotionColors.darkTextPrimary
-                        : NotionColors.lightTextPrimary,
-                  ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () {
+            ref.read(selectedDocumentIdProvider.notifier).state = document.id;
+            onCloseDrawer?.call();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.article_outlined,
+                  size: 16,
+                  color: isDark
+                      ? NotionColors.darkTextMuted
+                      : NotionColors.lightTextMuted,
                 ),
-              ),
-              if (isHovered.value) ...[
-                const SizedBox(width: 4),
-                InkWell(
-                  borderRadius: BorderRadius.circular(4),
-                  onTap: () {
-                    restoreDocument(ref, document.id);
-                    onCloseDrawer?.call();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Icon(
-                      Icons.restore,
-                      size: 14,
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    document.title.isEmpty ? 'Untitled' : document.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
                       color: isDark
-                          ? NotionColors.darkTextMuted
-                          : NotionColors.lightTextMuted,
+                          ? NotionColors.darkTextPrimary
+                          : NotionColors.lightTextPrimary,
                     ),
                   ),
                 ),
-                const SizedBox(width: 2),
-                InkWell(
-                  borderRadius: BorderRadius.circular(4),
-                  onTap: () => permanentDeleteDocument(ref, document.id),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Icon(
-                      Icons.delete_forever,
-                      size: 14,
-                      color: isDark
-                          ? NotionColors.darkTextMuted
-                          : NotionColors.lightTextMuted,
+                if (!isDesktop || isHovered.value) ...[
+                  const SizedBox(width: 4),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(4),
+                    onTap: () {
+                      restoreDocument(ref, document.id);
+                      onCloseDrawer?.call();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Icon(
+                        Icons.restore,
+                        size: 14,
+                        color: isDark
+                            ? NotionColors.darkTextMuted
+                            : NotionColors.lightTextMuted,
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 2),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(4),
+                    onTap: () => permanentDeleteDocument(ref, document.id),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Icon(
+                        Icons.delete_forever,
+                        size: 14,
+                        color: isDark
+                            ? NotionColors.darkTextMuted
+                            : NotionColors.lightTextMuted,
+                      ),
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

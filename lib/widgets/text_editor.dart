@@ -11,9 +11,14 @@ import 'package:tulis/providers/documents_provider.dart';
 import 'package:tulis/widgets/page_title.dart';
 
 class TextEditor extends HookConsumerWidget {
-  const TextEditor({super.key, required this.textDocument});
+  const TextEditor({
+    super.key,
+    required this.textDocument,
+    this.readOnly = false,
+  });
 
   final TextDocument textDocument;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,6 +30,7 @@ class TextEditor extends HookConsumerWidget {
       QuillController(
         document: textDocument.content,
         selection: const TextSelection.collapsed(offset: 0),
+        readOnly: readOnly,
       ),
     ).value;
 
@@ -32,6 +38,7 @@ class TextEditor extends HookConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     useEffect(() {
+      if (readOnly) return null;
       final initialDeltaJson = jsonEncode(
         textDocument.content.toDelta().toJson(),
       );
@@ -65,7 +72,7 @@ class TextEditor extends HookConsumerWidget {
 
       quillController.addListener(listener);
       return () => quillController.removeListener(listener);
-    }, [docId]);
+    }, [docId, readOnly]);
 
     final borderBg = isDark
         ? NotionColors.darkBorder
@@ -164,7 +171,7 @@ class TextEditor extends HookConsumerWidget {
     return Column(
       children: [
         // Desktop Static Toolbar Header (Shown ONLY on desktop)
-        if (isDesktop)
+        if (isDesktop && !readOnly)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Center(
@@ -192,12 +199,14 @@ class TextEditor extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Inline Title Header
-                    PageTitle(textDocument: textDocument),
+                    PageTitle(textDocument: textDocument, readOnly: readOnly),
 
                     // Text Editor Canvas (Expands to fill remaining height)
                     Expanded(
                       child: MouseRegion(
-                        cursor: SystemMouseCursors.text,
+                        cursor: readOnly
+                            ? SystemMouseCursors.basic
+                            : SystemMouseCursors.text,
                         child: QuillEditor.basic(
                           controller: quillController,
                           focusNode: focusNode,
@@ -206,6 +215,7 @@ class TextEditor extends HookConsumerWidget {
                             expands: true,
                             padding: EdgeInsets.zero,
                             placeholder: "Write something...",
+                            checkBoxReadOnly: readOnly,
                             customStyles: DefaultStyles(
                               h1: DefaultTextBlockStyle(
                                 TextStyle(
@@ -290,7 +300,7 @@ class TextEditor extends HookConsumerWidget {
         ),
 
         // Mobile Floating Keyboard Toolbar (Shows ONLY on mobile when editor is focused)
-        if (!isDesktop && isFocused)
+        if (!isDesktop && !readOnly && isFocused)
           Padding(
             padding: EdgeInsets.only(
               left: 16,

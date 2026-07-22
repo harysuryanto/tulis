@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/constants/notion_theme.dart';
+import 'package:tulis/helper.dart';
 import 'package:tulis/main.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
@@ -146,7 +147,7 @@ class _DocumentTile extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                if (isHovered.value || isSelected) ...[
+                if (!isDesktop || isHovered.value || isSelected) ...[
                   const SizedBox(width: 4),
                   InkWell(
                     borderRadius: BorderRadius.circular(4),
