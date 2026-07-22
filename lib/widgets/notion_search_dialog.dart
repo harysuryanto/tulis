@@ -40,14 +40,19 @@ class NotionSearchDialog extends HookConsumerWidget {
 
     final query = searchQuery.value.toLowerCase().trim();
 
-    final filteredDocs = documents.values.where((doc) {
-      if (query.isEmpty) return true;
-      final titleMatches = doc.title.toLowerCase().contains(query);
-      final bodyMatches = doc.content.toPlainText().toLowerCase().contains(
-        query,
-      );
-      return titleMatches || bodyMatches;
-    }).toList();
+    final filteredDocs =
+        documents.values.where((doc) {
+          if (query.isEmpty) return true;
+          final titleMatches = doc.title.toLowerCase().contains(query);
+          final bodyMatches = doc.content.toPlainText().toLowerCase().contains(
+            query,
+          );
+          return titleMatches || bodyMatches;
+        }).toList()..sort((a, b) {
+          final dateA = a.updatedAt ?? a.createAt;
+          final dateB = b.updatedAt ?? b.createAt;
+          return dateB.compareTo(dateA);
+        });
 
     return CallbackShortcuts(
       bindings: {

@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,17 +28,34 @@ class TextEditor extends HookConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     useEffect(() {
+      final initialDeltaJson = jsonEncode(
+        textDocument.content.toDelta().toJson(),
+      );
+      final initialUpdatedAt = textDocument.updatedAt;
+
       void listener() {
         final latestDocument = quillController.document;
-        log(latestDocument.toPlainText());
+        final currentDeltaJson = jsonEncode(latestDocument.toDelta().toJson());
+        final isContentChanged = currentDeltaJson != initialDeltaJson;
+
         ref.read(documentsProvider.notifier).update((state) {
           if (!state.containsKey(docId)) return state;
           final value = state[docId]!;
-          final updated = value.copyWith(
-            content: Document.fromDelta(latestDocument.toDelta()),
-            updatedAt: DateTime.now(),
-          );
-          return {...state, docId: updated};
+
+          final updated = isContentChanged
+              ? value.copyWith(
+                  content: Document.fromDelta(latestDocument.toDelta()),
+                  updatedAt: DateTime.now(),
+                )
+              : value.copyWith(
+                  content: Document.fromDelta(latestDocument.toDelta()),
+                  updatedAt: initialUpdatedAt,
+                  clearUpdatedAt: initialUpdatedAt == null,
+                );
+
+          final newState = {...state, docId: updated};
+          saveDocumentsToHive(newState);
+          return newState;
         });
       }
 

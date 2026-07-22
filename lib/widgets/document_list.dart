@@ -8,19 +8,26 @@ import 'package:tulis/providers/documents_provider.dart';
 class DocumentList extends HookConsumerWidget {
   const DocumentList({super.key});
 
+  static const double itemHeight = 32.0;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final documents = ref.watch(documentsProvider);
     final searchQuery = ref.watch(searchQueryProvider).toLowerCase();
 
-    final filteredDocs = documents.values.where((doc) {
-      if (searchQuery.isEmpty) return true;
-      final titleMatches = doc.title.toLowerCase().contains(searchQuery);
-      final bodyMatches = doc.content.toPlainText().toLowerCase().contains(
-        searchQuery,
-      );
-      return titleMatches || bodyMatches;
-    }).toList();
+    final filteredDocs =
+        documents.values.where((doc) {
+          if (searchQuery.isEmpty) return true;
+          final titleMatches = doc.title.toLowerCase().contains(searchQuery);
+          final bodyMatches = doc.content.toPlainText().toLowerCase().contains(
+            searchQuery,
+          );
+          return titleMatches || bodyMatches;
+        }).toList()..sort((a, b) {
+          final dateA = a.updatedAt ?? a.createAt;
+          final dateB = b.updatedAt ?? b.createAt;
+          return dateB.compareTo(dateA);
+        });
 
     if (filteredDocs.isEmpty) {
       return Padding(
@@ -32,22 +39,32 @@ class DocumentList extends HookConsumerWidget {
       );
     }
 
-    return ListView.builder(
+    return SingleChildScrollView(
       padding: EdgeInsets.zero,
-      itemCount: filteredDocs.length,
-      itemBuilder: (context, index) {
-        final document = filteredDocs[index];
-        return _NotionDocumentTile(
-          key: ValueKey(document.id),
-          document: document,
-        );
-      },
+      child: SizedBox(
+        height: filteredDocs.length * itemHeight,
+        child: Stack(
+          children: [
+            for (int i = 0; i < filteredDocs.length; i++)
+              AnimatedPositioned(
+                key: ValueKey(filteredDocs[i].id),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOutCubic,
+                top: i * itemHeight,
+                left: 0,
+                right: 0,
+                height: itemHeight,
+                child: _NotionDocumentTile(document: filteredDocs[i]),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class _NotionDocumentTile extends HookConsumerWidget {
-  const _NotionDocumentTile({super.key, required this.document});
+  const _NotionDocumentTile({required this.document});
 
   final TextDocument document;
 
@@ -76,6 +93,7 @@ class _NotionDocumentTile extends HookConsumerWidget {
       onEnter: (_) => isHovered.value = true,
       onExit: (_) => isHovered.value = false,
       child: Container(
+        height: DocumentList.itemHeight - 2,
         margin: const EdgeInsets.symmetric(vertical: 1),
         decoration: BoxDecoration(
           color: tileColor,
@@ -87,7 +105,7 @@ class _NotionDocumentTile extends HookConsumerWidget {
             ref.read(selectedDocumentIdProvider.notifier).state = document.id;
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Row(
               children: [
                 Icon(
