@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -49,7 +49,7 @@ class TextEditor2 extends HookConsumerWidget {
     }, [key]);
 
     return ColoredBox(
-      color: isDesktop ? Colors.transparent : Colors.grey[180],
+      color: isDesktop ? Colors.transparent : Colors.grey.shade200,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         verticalDirection: isDesktop
@@ -87,6 +87,15 @@ class TextEditor2 extends HookConsumerWidget {
                   ),
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Text(
+              textDocument.title,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
@@ -149,7 +158,7 @@ class _TextEditorState extends State<TextEditor> {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: isDesktop ? Colors.transparent : Colors.grey[180],
+      color: isDesktop ? Colors.transparent : Colors.grey.shade200,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         verticalDirection: isDesktop
@@ -187,6 +196,15 @@ class _TextEditorState extends State<TextEditor> {
                   ),
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Text(
+              widget.textDocument.title,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(

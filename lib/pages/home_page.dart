@@ -1,4 +1,4 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/providers/documents_provider.dart';
 import 'package:tulis/widgets/page_wrapper.dart';
