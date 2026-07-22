@@ -54,7 +54,7 @@ class DocumentList extends HookConsumerWidget {
                 left: 0,
                 right: 0,
                 height: itemHeight,
-                child: _NotionDocumentTile(document: filteredDocs[i]),
+                child: _DocumentTile(document: filteredDocs[i]),
               ),
           ],
         ),
@@ -63,8 +63,8 @@ class DocumentList extends HookConsumerWidget {
   }
 }
 
-class _NotionDocumentTile extends HookConsumerWidget {
-  const _NotionDocumentTile({required this.document});
+class _DocumentTile extends HookConsumerWidget {
+  const _DocumentTile({required this.document});
 
   final TextDocument document;
 

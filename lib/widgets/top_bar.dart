@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/constants/notion_theme.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
-class NotionTopBar extends HookConsumerWidget {
-  const NotionTopBar({
+class TopBar extends HookConsumerWidget {
+  const TopBar({
     super.key,
     required this.onToggleSidebar,
     required this.isSidebarVisible,

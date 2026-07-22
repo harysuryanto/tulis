@@ -8,7 +8,7 @@ import 'package:tulis/constants/notion_theme.dart';
 import 'package:tulis/helper.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
-import 'package:tulis/widgets/notion_page_title.dart';
+import 'package:tulis/widgets/page_title.dart';
 
 class TextEditor extends HookConsumerWidget {
   const TextEditor({super.key, required this.textDocument});
@@ -192,7 +192,7 @@ class TextEditor extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Inline Title Header
-                    NotionPageTitle(textDocument: textDocument),
+                    PageTitle(textDocument: textDocument),
 
                     // Text Editor Canvas (Expands to fill remaining height)
                     Expanded(

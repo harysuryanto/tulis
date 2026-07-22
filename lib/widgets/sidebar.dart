@@ -7,10 +7,10 @@ import 'package:tulis/constants/notion_theme.dart';
 import 'package:tulis/helper.dart';
 import 'package:tulis/providers/documents_provider.dart';
 import 'package:tulis/widgets/document_list.dart';
-import 'package:tulis/widgets/notion_search_dialog.dart';
+import 'package:tulis/widgets/search_dialog.dart';
 
-class NotionSidebar extends HookConsumerWidget {
-  const NotionSidebar({super.key, this.onCloseDrawer});
+class Sidebar extends HookConsumerWidget {
+  const Sidebar({super.key, this.onCloseDrawer});
 
   final VoidCallback? onCloseDrawer;
 
@@ -91,7 +91,7 @@ class NotionSidebar extends HookConsumerWidget {
           // Search Bar Trigger
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: _NotionSidebarItem(
+            child: _SidebarItem(
               icon: Icons.search,
               label: 'Search',
               shortcutHint: isDesktop
@@ -99,7 +99,7 @@ class NotionSidebar extends HookConsumerWidget {
                   : null,
               onTap: () {
                 if (onCloseDrawer != null) onCloseDrawer!();
-                showNotionSearchDialog(context, ref);
+                showSearchDialog(context, ref);
               },
             ),
           ),
@@ -107,17 +107,13 @@ class NotionSidebar extends HookConsumerWidget {
           // Dark/Light Theme Switch
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            child: _NotionSidebarItem(
+            child: _SidebarItem(
               icon: themeMode == ThemeMode.dark
                   ? Icons.dark_mode_outlined
                   : Icons.light_mode_outlined,
               label: themeMode == ThemeMode.dark ? 'Dark Mode' : 'Light Mode',
               onTap: () {
-                ref
-                    .read(themeModeProvider.notifier)
-                    .state = themeMode == ThemeMode.dark
-                    ? ThemeMode.light
-                    : ThemeMode.dark;
+                toggleThemeMode(ref);
               },
             ),
           ),
@@ -150,7 +146,7 @@ class NotionSidebar extends HookConsumerWidget {
           // "+ New page" Button
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _NotionSidebarItem(
+            child: _SidebarItem(
               icon: Icons.add,
               label: 'New page',
               onTap: canCreateNew ? () => createNewDocument(ref) : null,
@@ -162,8 +158,8 @@ class NotionSidebar extends HookConsumerWidget {
   }
 }
 
-class _NotionSidebarItem extends HookConsumerWidget {
-  const _NotionSidebarItem({
+class _SidebarItem extends HookConsumerWidget {
+  const _SidebarItem({
     required this.icon,
     required this.label,
     this.onTap,

@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/constants/notion_theme.dart';
-import 'package:tulis/widgets/notion_search_dialog.dart';
-import 'package:tulis/widgets/notion_sidebar.dart';
-import 'package:tulis/widgets/notion_top_bar.dart';
+import 'package:tulis/widgets/search_dialog.dart';
+import 'package:tulis/widgets/sidebar.dart';
+import 'package:tulis/widgets/top_bar.dart';
 
 class PageWrapper extends HookConsumerWidget {
   const PageWrapper({super.key, required this.child});
@@ -18,7 +18,7 @@ class PageWrapper extends HookConsumerWidget {
     final isSidebarExpanded = useState(true);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final isSmallScreen = MediaQuery.of(context).size.width <= 600;
+    final isSmallScreen = MediaQuery.of(context).size.width < 768;
 
     useEffect(() {
       if (isSmallScreen) {
@@ -44,14 +44,18 @@ class PageWrapper extends HookConsumerWidget {
         backgroundColor: canvasBg,
         body: Stack(
           children: [
-            SafeArea(
+            // Main Canvas Area
+            Positioned.fill(
               child: Column(
                 children: [
-                  NotionTopBar(
-                    isSidebarVisible: isSidebarExpanded.value,
-                    onToggleSidebar: () {
-                      isSidebarExpanded.value = !isSidebarExpanded.value;
-                    },
+                  SafeArea(
+                    bottom: false,
+                    child: TopBar(
+                      isSidebarVisible: isSidebarExpanded.value,
+                      onToggleSidebar: () {
+                        isSidebarExpanded.value = !isSidebarExpanded.value;
+                      },
+                    ),
                   ),
                   Expanded(child: child),
                 ],
@@ -78,7 +82,7 @@ class PageWrapper extends HookConsumerWidget {
                 elevation: 16,
                 color: sidebarBg,
                 child: SafeArea(
-                  child: NotionSidebar(
+                  child: Sidebar(
                     onCloseDrawer: () => isSidebarExpanded.value = false,
                   ),
                 ),
@@ -110,7 +114,7 @@ class PageWrapper extends HookConsumerWidget {
                     minWidth: sidebarWidth,
                     maxWidth: sidebarWidth,
                     alignment: Alignment.topLeft,
-                    child: const NotionSidebar(),
+                    child: const Sidebar(),
                   ),
                 ),
               ),
@@ -121,7 +125,7 @@ class PageWrapper extends HookConsumerWidget {
                 children: [
                   SafeArea(
                     bottom: false,
-                    child: NotionTopBar(
+                    child: TopBar(
                       isSidebarVisible: isSidebarExpanded.value,
                       onToggleSidebar: () {
                         isSidebarExpanded.value = !isSidebarExpanded.value;
@@ -140,16 +144,16 @@ class PageWrapper extends HookConsumerWidget {
     return CallbackShortcuts(
       bindings: {
         const SingleActivator(LogicalKeyboardKey.keyP, meta: true): () {
-          showNotionSearchDialog(context, ref);
+          showSearchDialog(context, ref);
         },
         const SingleActivator(LogicalKeyboardKey.keyP, control: true): () {
-          showNotionSearchDialog(context, ref);
+          showSearchDialog(context, ref);
         },
         const SingleActivator(LogicalKeyboardKey.keyK, meta: true): () {
-          showNotionSearchDialog(context, ref);
+          showSearchDialog(context, ref);
         },
         const SingleActivator(LogicalKeyboardKey.keyK, control: true): () {
-          showNotionSearchDialog(context, ref);
+          showSearchDialog(context, ref);
         },
       },
       child: Focus(autofocus: true, child: bodyContent),

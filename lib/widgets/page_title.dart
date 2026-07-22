@@ -6,8 +6,8 @@ import 'package:tulis/helper.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
-class NotionPageTitle extends HookConsumerWidget {
-  const NotionPageTitle({super.key, required this.textDocument});
+class PageTitle extends HookConsumerWidget {
+  const PageTitle({super.key, required this.textDocument});
 
   final TextDocument textDocument;
 

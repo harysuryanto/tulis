@@ -7,17 +7,17 @@ import 'package:tulis/helper.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
-void showNotionSearchDialog(BuildContext context, WidgetRef ref) {
+void showSearchDialog(BuildContext context, WidgetRef ref) {
   showDialog(
     context: context,
     barrierDismissible: true,
     barrierColor: Colors.black.withValues(alpha: 0.4),
-    builder: (context) => const NotionSearchDialog(),
+    builder: (context) => const SearchDialog(),
   );
 }
 
-class NotionSearchDialog extends HookConsumerWidget {
-  const NotionSearchDialog({super.key});
+class SearchDialog extends HookConsumerWidget {
+  const SearchDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
