@@ -1,13 +1,8 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:tulis/helper.dart';
+import 'package:flutter/material.dart';
 import 'package:tulis/widgets/document_list.dart';
 
 class Pane extends StatelessWidget {
-  const Pane({
-    super.key,
-    required this.isExpanded,
-  });
+  const Pane({super.key, required this.isExpanded});
 
   final bool isExpanded;
 
@@ -22,12 +17,11 @@ class Pane extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: MediaQuery.of(context).viewPadding.top),
-            if (isDesktop)
-              SizedBox(
-                height: appWindow.titleBarButtonSize.height,
-                child: MoveWindow(),
-              ),
-            const Text('Documents'),
+            const Text(
+              'Documents',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
             const Expanded(child: DocumentList()),
           ],
         ),

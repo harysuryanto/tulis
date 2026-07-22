@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tulis/helper.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
@@ -28,9 +29,7 @@ class DocumentList extends HookConsumerWidget {
 }
 
 class _MyListTile extends HookConsumerWidget {
-  const _MyListTile({
-    required this.document,
-  });
+  const _MyListTile({required this.document});
 
   final TextDocument document;
 
@@ -75,7 +74,7 @@ class _MyListTile extends HookConsumerWidget {
                 ),
                 // Subtitle
                 Text(
-                  '${document.updatedAt?.second ?? document.createAt}',
+                  formatDate(document.updatedAt ?? document.createAt),
                   style: const TextStyle(fontSize: 10),
                 ),
               ],
