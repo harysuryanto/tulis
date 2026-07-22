@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tulis/helper.dart';
+import 'package:tulis/constants/notion_theme.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
@@ -12,71 +10,131 @@ class DocumentList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: Migrate to newer state
     final documents = ref.watch(documentsProvider);
-    if (documents.isEmpty) {
-      return const Text('No documents available. Please add one.');
+    final searchQuery = ref.watch(searchQueryProvider).toLowerCase();
+
+    final filteredDocs = documents.values.where((doc) {
+      if (searchQuery.isEmpty) return true;
+      final titleMatches = doc.title.toLowerCase().contains(searchQuery);
+      final bodyMatches = doc.content.toPlainText().toLowerCase().contains(
+        searchQuery,
+      );
+      return titleMatches || bodyMatches;
+    }).toList();
+
+    if (filteredDocs.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        child: Text(
+          searchQuery.isEmpty ? 'No pages yet.' : 'No results found.',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      );
     }
+
     return ListView.builder(
+      padding: EdgeInsets.zero,
+      itemCount: filteredDocs.length,
       itemBuilder: (context, index) {
-        final document = documents.values.toList()[index];
-        log(document.id.toString());
-        return _MyListTile(document: document);
+        final document = filteredDocs[index];
+        return _NotionDocumentTile(
+          key: ValueKey(document.id),
+          document: document,
+        );
       },
-      itemCount: documents.length,
     );
   }
 }
 
-class _MyListTile extends HookConsumerWidget {
-  const _MyListTile({required this.document});
+class _NotionDocumentTile extends HookConsumerWidget {
+  const _NotionDocumentTile({super.key, required this.document});
 
   final TextDocument document;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedDocumentId = ref.watch(selectedDocumentIdProvider);
+    final selectedId = ref.watch(selectedDocumentIdProvider);
+    final isSelected = document.id == selectedId;
     final isHovered = useState(false);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    void openDocument() {
-      ref
-          .read(selectedDocumentIdProvider.notifier)
-          .update((id) => id = document.id);
+    final hoverColor = isDark
+        ? NotionColors.darkHover
+        : NotionColors.lightHover;
+    final activeColor = isDark
+        ? NotionColors.darkActive
+        : NotionColors.lightActive;
+
+    Color tileColor = Colors.transparent;
+    if (isSelected) {
+      tileColor = activeColor;
+    } else if (isHovered.value) {
+      tileColor = hoverColor;
     }
 
-    return GestureDetector(
-      onTap: openDocument,
-      child: MouseRegion(
-        onEnter: (_) => isHovered.value = true,
-        onExit: (_) => isHovered.value = false,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: isHovered.value ? .1 : 0),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: isHovered.value ? .2 : 0),
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
+    return MouseRegion(
+      onEnter: (_) => isHovered.value = true,
+      onExit: (_) => isHovered.value = false,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 1),
+        decoration: BoxDecoration(
+          color: tileColor,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () {
+            ref.read(selectedDocumentIdProvider.notifier).state = document.id;
+          },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Row(
               children: [
-                // Title
-                Text(
-                  document.title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: document.id == selectedDocumentId
-                        ? FontWeight.bold
-                        : null,
+                Icon(
+                  Icons.article_outlined,
+                  size: 16,
+                  color: isSelected
+                      ? (isDark
+                            ? NotionColors.darkTextPrimary
+                            : NotionColors.lightTextPrimary)
+                      : (isDark
+                            ? NotionColors.darkTextMuted
+                            : NotionColors.lightTextMuted),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    document.title.isEmpty ? 'Untitled' : document.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w400,
+                      color: isDark
+                          ? NotionColors.darkTextPrimary
+                          : NotionColors.lightTextPrimary,
+                    ),
                   ),
                 ),
-                // Subtitle
-                Text(
-                  formatDate(document.updatedAt ?? document.createAt),
-                  style: const TextStyle(fontSize: 10),
-                ),
+                if (isHovered.value || isSelected) ...[
+                  const SizedBox(width: 4),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(4),
+                    onTap: () => deleteDocument(ref, document.id),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Icon(
+                        Icons.close,
+                        size: 14,
+                        color: isDark
+                            ? NotionColors.darkTextMuted
+                            : NotionColors.lightTextMuted,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
