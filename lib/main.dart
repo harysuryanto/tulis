@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tulis/constants/hive_box_keys.dart';
@@ -77,16 +79,19 @@ class _MyAppState extends State<MyApp> with WindowListener {
 
   Future<void> restoreWindowSize() async {
     final windowSizeFromStorage = box.get(HiveBoxKeys.windowSize) as String?;
+    if (windowSizeFromStorage == null) return; // no saved size yet on first run
     final windowSize = WindowSize.fromMap(
-      jsonDecode(windowSizeFromStorage!) as Map<String, dynamic>,
+      jsonDecode(windowSizeFromStorage) as Map<String, dynamic>,
     );
     await windowManager.setSize(Size(windowSize.width, windowSize.height));
   }
 
   Future<void> saveWindowSize() async {
     final size = await windowManager.getSize();
-    final windowSize =
-        WindowSize(width: size.width, height: size.height).toMap();
+    final windowSize = WindowSize(
+      width: size.width,
+      height: size.height,
+    ).toMap();
     box.put(HiveBoxKeys.windowSize, jsonEncode(windowSize));
   }
 
@@ -97,27 +102,35 @@ class _MyAppState extends State<MyApp> with WindowListener {
       final windowPosition = WindowPosition.fromMap(
         jsonDecode(windowPositionFromStorage) as Map<String, dynamic>,
       );
-      await windowManager
-          .setPosition(Offset(windowPosition.dx, windowPosition.dy));
+      await windowManager.setPosition(
+        Offset(windowPosition.dx, windowPosition.dy),
+      );
     }
   }
 
   Future<void> saveWindowPosition() async {
     final position = await windowManager.getPosition();
-    final windowPosition =
-        WindowPosition(dx: position.dx, dy: position.dy).toMap();
+    final windowPosition = WindowPosition(
+      dx: position.dx,
+      dy: position.dy,
+    ).toMap();
     box.put(HiveBoxKeys.windowPosition, jsonEncode(windowPosition));
   }
 
   @override
   Widget build(BuildContext context) {
     return FluentApp(
-      theme: ThemeData(
+      theme: FluentThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.blue,
-        borderInputColor: Colors.transparent,
       ),
       title: '✍️ Tulis — by Hary Suryanto',
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
       home: const HomePage(),
     );
   }
