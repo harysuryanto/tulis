@@ -83,12 +83,12 @@ void toggleThemeMode(WidgetRef ref) {
 
 bool hasUneditedUntitledDoc(Map<int, TextDocument> documents) {
   return documents.values.any((doc) {
+    final isNotDeleted = doc.deletedAt == null;
     final isUntitled =
         doc.title.trim().toLowerCase() == 'untitled' ||
         doc.title.trim().isEmpty;
     final isBodyEmpty = doc.content.toPlainText().trim().isEmpty;
-    final isNotUpdated = doc.updatedAt == null;
-    return isUntitled && isBodyEmpty && isNotUpdated;
+    return isNotDeleted && isUntitled && isBodyEmpty;
   });
 }
 
