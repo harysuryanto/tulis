@@ -8,8 +8,8 @@ import 'package:tulis/helper.dart';
 import 'package:tulis/models/text_document.dart';
 import 'package:tulis/providers/documents_provider.dart';
 
-class TextEditor2 extends HookConsumerWidget {
-  const TextEditor2({super.key, required this.textDocument});
+class TextEditor extends HookConsumerWidget {
+  const TextEditor({super.key, required this.textDocument});
 
   final TextDocument textDocument;
 
@@ -48,8 +48,12 @@ class TextEditor2 extends HookConsumerWidget {
       return quillController.dispose;
     }, [key]);
 
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ColoredBox(
-      color: isDesktop ? Colors.transparent : Colors.grey.shade200,
+      color: isDesktop
+          ? Colors.transparent
+          : colorScheme.surfaceContainerLowest,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         verticalDirection: isDesktop
@@ -57,33 +61,60 @@ class TextEditor2 extends HookConsumerWidget {
             : VerticalDirection.up,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: QuillSimpleToolbar(
-              controller: quillController,
-              config: QuillSimpleToolbarConfig(
-                multiRowsDisplay: false,
-                toolbarIconAlignment: WrapAlignment.start,
-                showFontFamily: false,
-                showFontSize: false,
-                showUndo: false,
-                showRedo: false,
-                showBackgroundColorButton: false,
-                showAlignmentButtons: false,
-                showColorButton: false,
-                showDividers: false,
-                showSearchButton: false,
-                showCodeBlock: false,
-                showQuote: false,
-                showLink: false,
-                iconTheme: QuillIconTheme(
-                  iconButtonUnselectedData: const IconButtonData(
-                    color: Colors.transparent,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Material(
+              color: colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(12),
+              elevation: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.5),
                   ),
-                  iconButtonSelectedData: IconButtonData(color: Colors.blue),
                 ),
-                buttonOptions: QuillSimpleToolbarButtonOptions(
-                  base: QuillToolbarBaseButtonOptions(
-                    afterButtonPressed: focusNode.requestFocus,
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                child: QuillSimpleToolbar(
+                  controller: quillController,
+                  config: QuillSimpleToolbarConfig(
+                    multiRowsDisplay: false,
+                    toolbarIconAlignment: WrapAlignment.start,
+                    showFontFamily: false,
+                    showFontSize: false,
+                    showUndo: true,
+                    showRedo: true,
+                    showBoldButton: true,
+                    showItalicButton: true,
+                    showUnderLineButton: true,
+                    showStrikeThrough: true,
+                    showInlineCode: true,
+                    showColorButton: false,
+                    showBackgroundColorButton: false,
+                    showClearFormat: true,
+                    showAlignmentButtons: true,
+                    showHeaderStyle: true,
+                    showListNumbers: true,
+                    showListBullets: true,
+                    showListCheck: true,
+                    showCodeBlock: true,
+                    showQuote: true,
+                    showIndent: false,
+                    showLink: false,
+                    showDividers: true,
+                    showSearchButton: false,
+                    iconTheme: QuillIconTheme(
+                      iconButtonUnselectedData: IconButtonData(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      iconButtonSelectedData: IconButtonData(
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                    buttonOptions: QuillSimpleToolbarButtonOptions(
+                      base: QuillToolbarBaseButtonOptions(
+                        afterButtonPressed: focusNode.requestFocus,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -104,115 +135,6 @@ class TextEditor2 extends HookConsumerWidget {
               child: QuillEditor.basic(
                 controller: quillController,
                 focusNode: focusNode,
-                config: const QuillEditorConfig(
-                  autoFocus: false,
-                  expands: false,
-                  padding: EdgeInsets.all(20),
-                  placeholder: 'Write here...',
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TextEditor extends StatefulWidget {
-  const TextEditor({super.key, required this.textDocument});
-
-  final TextDocument textDocument;
-
-  @override
-  State<TextEditor> createState() => _TextEditorState();
-}
-
-class _TextEditorState extends State<TextEditor> {
-  final FocusNode _focusNode = FocusNode();
-  late final QuillController _quillController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _quillController = QuillController(
-      document: widget.textDocument.content,
-      selection: const TextSelection.collapsed(offset: 0),
-    );
-
-    // Save document to storage on value changes
-    _quillController.addListener(() {
-      log('${widget.key} Saving doc...');
-    });
-  }
-
-  @override
-  void dispose() {
-    log('${widget.key} Dispose');
-    _focusNode.dispose();
-    _quillController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: isDesktop ? Colors.transparent : Colors.grey.shade200,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        verticalDirection: isDesktop
-            ? VerticalDirection.down
-            : VerticalDirection.up,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: QuillSimpleToolbar(
-              controller: _quillController,
-              config: QuillSimpleToolbarConfig(
-                multiRowsDisplay: false,
-                toolbarIconAlignment: WrapAlignment.start,
-                showFontFamily: false,
-                showFontSize: false,
-                showUndo: false,
-                showRedo: false,
-                showBackgroundColorButton: false,
-                showAlignmentButtons: false,
-                showColorButton: false,
-                showDividers: false,
-                showSearchButton: false,
-                showCodeBlock: false,
-                showQuote: false,
-                showLink: false,
-                iconTheme: QuillIconTheme(
-                  iconButtonUnselectedData: const IconButtonData(
-                    color: Colors.transparent,
-                  ),
-                  iconButtonSelectedData: IconButtonData(color: Colors.blue),
-                ),
-                buttonOptions: QuillSimpleToolbarButtonOptions(
-                  base: QuillToolbarBaseButtonOptions(
-                    afterButtonPressed: _focusNode.requestFocus,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: Text(
-              widget.textDocument.title,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(
-            child: MouseRegion(
-              cursor: SystemMouseCursors.text,
-              child: QuillEditor.basic(
-                controller: _quillController,
-                focusNode: _focusNode,
                 config: const QuillEditorConfig(
                   autoFocus: false,
                   expands: false,

@@ -17,7 +17,7 @@ class HomePage extends ConsumerWidget {
           Expanded(
             child: documents.isEmpty
                 ? const Center(child: Text('No data available.'))
-                : TextEditor2(
+                : TextEditor(
                     key: ValueKey(documents[selectedDocumentId]!.id),
                     textDocument: documents[selectedDocumentId]!,
                   ),
