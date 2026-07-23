@@ -198,8 +198,11 @@ class TextEditor extends HookConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Inline Title Header
-                    PageTitle(textDocument: textDocument, readOnly: readOnly),
+                    PageTitle(
+                      textDocument: textDocument,
+                      readOnly: readOnly,
+                      onNextFocus: focusNode.requestFocus,
+                    ),
 
                     // Text Editor Canvas (Expands to fill remaining height)
                     Expanded(
