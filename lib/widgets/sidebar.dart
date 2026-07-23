@@ -107,12 +107,16 @@ class Sidebar extends HookConsumerWidget {
             ),
           ),
 
-          // Dark/Light Theme Switch
+          // Theme Switcher (System / Light / Dark)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             child: _SidebarItem(
               customIcon: AnimatedRotation(
-                turns: isDark ? 1.0 : 0.0,
+                turns: switch (themeMode) {
+                  ThemeMode.system => 0.0,
+                  ThemeMode.light => 0.5,
+                  ThemeMode.dark => 1.0,
+                },
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOutCubic,
                 child: AnimatedSwitcher(
@@ -120,16 +124,22 @@ class Sidebar extends HookConsumerWidget {
                   transitionBuilder: (child, anim) =>
                       ScaleTransition(scale: anim, child: child),
                   child: Icon(
-                    isDark
-                        ? Icons.dark_mode_outlined
-                        : Icons.light_mode_outlined,
-                    key: ValueKey(isDark),
+                    switch (themeMode) {
+                      ThemeMode.system => Icons.brightness_auto_outlined,
+                      ThemeMode.light => Icons.light_mode_outlined,
+                      ThemeMode.dark => Icons.dark_mode_outlined,
+                    },
+                    key: ValueKey(themeMode),
                     size: 16,
                     color: textMuted,
                   ),
                 ),
               ),
-              label: themeMode == ThemeMode.dark ? 'Dark Mode' : 'Light Mode',
+              label: switch (themeMode) {
+                ThemeMode.system => 'System Theme',
+                ThemeMode.light => 'Light Mode',
+                ThemeMode.dark => 'Dark Mode',
+              },
               onTap: () {
                 toggleThemeMode(ref);
               },

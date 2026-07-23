@@ -17,6 +17,7 @@ class TopBar extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final themeMode = ref.watch(themeModeProvider);
     final selectedId = ref.watch(selectedDocumentIdProvider);
     final documents = ref.watch(documentsProvider);
 
@@ -96,10 +97,14 @@ class TopBar extends HookConsumerWidget {
             ),
           ),
 
-          // Dark/Light Theme Toggle Button
+          // Theme Toggle Button (System / Light / Dark)
           _TopBarIconButton(
             customIcon: AnimatedRotation(
-              turns: isDark ? 1.0 : 0.0,
+              turns: switch (themeMode) {
+                ThemeMode.system => 0.0,
+                ThemeMode.light => 0.5,
+                ThemeMode.dark => 1.0,
+              },
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOutCubic,
               child: AnimatedSwitcher(
@@ -107,14 +112,22 @@ class TopBar extends HookConsumerWidget {
                 transitionBuilder: (child, anim) =>
                     ScaleTransition(scale: anim, child: child),
                 child: Icon(
-                  isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
-                  key: ValueKey(isDark),
+                  switch (themeMode) {
+                    ThemeMode.system => Icons.brightness_auto_outlined,
+                    ThemeMode.light => Icons.light_mode_outlined,
+                    ThemeMode.dark => Icons.dark_mode_outlined,
+                  },
+                  key: ValueKey(themeMode),
                   size: 16,
                   color: textPrimary,
                 ),
               ),
             ),
-            tooltip: 'Toggle Theme',
+            tooltip: switch (themeMode) {
+              ThemeMode.system => 'Theme: System',
+              ThemeMode.light => 'Theme: Light',
+              ThemeMode.dark => 'Theme: Dark',
+            },
             onPressed: () => toggleThemeMode(ref),
           ),
           const SizedBox(width: 4),

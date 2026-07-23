@@ -59,25 +59,33 @@ Map<int, TextDocument> _loadDocumentsFromHive() {
   return _initialDefaultDocuments;
 }
 
-// Theme mode provider with Hive persistence
+// Theme mode provider with Hive persistence (System, Light, Dark)
 final themeModeProvider = StateProvider<ThemeMode>((ref) {
   try {
     final box = Hive.box(HiveBoxes.myBox);
     final savedMode = box.get(_kThemeModeHiveKey);
     if (savedMode == 'light') return ThemeMode.light;
     if (savedMode == 'dark') return ThemeMode.dark;
+    if (savedMode == 'system') return ThemeMode.system;
   } catch (_) {}
-  return ThemeMode.dark;
+  return ThemeMode.system;
 });
 
 void toggleThemeMode(WidgetRef ref) {
   final current = ref.read(themeModeProvider);
-  final next = current == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+  final next = switch (current) {
+    ThemeMode.system => ThemeMode.light,
+    ThemeMode.light => ThemeMode.dark,
+    ThemeMode.dark => ThemeMode.system,
+  };
   ref.read(themeModeProvider.notifier).state = next;
   try {
-    Hive.box(
-      HiveBoxes.myBox,
-    ).put(_kThemeModeHiveKey, next == ThemeMode.light ? 'light' : 'dark');
+    final modeStr = switch (next) {
+      ThemeMode.system => 'system',
+      ThemeMode.light => 'light',
+      ThemeMode.dark => 'dark',
+    };
+    Hive.box(HiveBoxes.myBox).put(_kThemeModeHiveKey, modeStr);
   } catch (_) {}
 }
 
