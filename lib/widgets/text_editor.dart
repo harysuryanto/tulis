@@ -302,12 +302,7 @@ class TextEditor extends HookConsumerWidget {
         // Mobile Floating Keyboard Toolbar (Shows ONLY on mobile when editor is focused)
         if (!isDesktop && !readOnly && isFocused)
           Padding(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 4,
-              bottom: 8 + MediaQuery.of(context).viewInsets.bottom,
-            ),
+            padding: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 8),
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 800),
