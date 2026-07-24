@@ -10,15 +10,16 @@ A Notepad on steroid 💪
 
 ## Screenshots
 
-| Windows | Android | macOS |
-| --- | --- | --- |
-| ![image](https://user-images.githubusercontent.com/17674038/204127779-8c65119f-a84e-43a0-a36a-fa4a5da8b42d.png) | ![image](https://user-images.githubusercontent.com/17674038/204132757-aad31ac0-9e51-468b-9f72-bd1762113d28.jpg) | *Coming soon* |
+| Desktop | Mobile |
+| --- | --- |
+| <img width="1110" height="789" alt="image" src="https://github.com/user-attachments/assets/995fdad3-baf2-404a-ba09-3273d84e9b27" /> | <img width="1206" height="2622" alt="image" src="https://github.com/user-attachments/assets/a9caddd9-71ca-4c37-a7f8-a8e74c955a47" /> |
 
 ## Compatibility
 Supported on:
 - Android
-- Windows
+- iOS
 - macOS
+- Windows
 
 ## Download
 Download [here](https://github.com/harysuryanto/tulis/releases).
