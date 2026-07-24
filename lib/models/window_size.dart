@@ -2,10 +2,7 @@ class WindowSize {
   final double width;
   final double height;
 
-  const WindowSize({
-    required this.width,
-    required this.height,
-  });
+  const WindowSize({required this.width, required this.height});
 
   factory WindowSize.fromMap(Map<String, dynamic> json) {
     return WindowSize(
@@ -15,9 +12,6 @@ class WindowSize {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'width': width,
-      'height': height,
-    };
+    return {'width': width, 'height': height};
   }
 }

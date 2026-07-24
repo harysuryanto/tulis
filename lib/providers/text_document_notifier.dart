@@ -6,16 +6,14 @@ import 'package:tulis/models/text_document.dart';
 
 class TextDocumentsNotifier extends StateNotifier<Map<int, TextDocument>> {
   TextDocumentsNotifier()
-      : super(
-          {
-            0: TextDocument(
-              id: 0,
-              title: '',
-              content: Document(),
-              createAt: DateTime.now(),
-            ),
-          },
-        );
+    : super({
+        0: TextDocument(
+          id: 0,
+          title: '',
+          content: Document(),
+          createAt: DateTime.now(),
+        ),
+      });
 
   void add({required String title, required Document document}) {
     final id = Random().nextInt(1000);
@@ -36,10 +34,7 @@ class TextDocumentsNotifier extends StateNotifier<Map<int, TextDocument>> {
   }) {
     state.update(
       id,
-      (value) => value.copyWith(
-        title: title,
-        content: document,
-      ),
+      (value) => value.copyWith(title: title, content: document),
     );
   }
 

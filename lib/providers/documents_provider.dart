@@ -18,90 +18,90 @@ final _docExample = [
   {'insert': 'TODO'},
   {
     'insert': '\n',
-    'attributes': {'header': 3}
+    'attributes': {'header': 3},
   },
   {'insert': 'Rename screen to page'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked'}
+    'attributes': {'list': 'checked'},
   },
   {'insert': 'Create models for'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked'}
+    'attributes': {'list': 'checked'},
   },
   {'insert': 'Window size'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked', 'indent': 1}
+    'attributes': {'list': 'checked', 'indent': 1},
   },
   {'insert': 'Window position'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked', 'indent': 1}
+    'attributes': {'list': 'checked', 'indent': 1},
   },
   {'insert': 'Set title overflow to ellipsis'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked'}
+    'attributes': {'list': 'checked'},
   },
   {'insert': 'Increase min window width by 50'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked'}
+    'attributes': {'list': 'checked'},
   },
   {'insert': 'Decrease min window height by 300'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked'}
+    'attributes': {'list': 'checked'},
   },
   {'insert': 'Save list of documents to storage'},
   {
     'insert': '\n',
-    'attributes': {'list': 'unchecked'}
+    'attributes': {'list': 'unchecked'},
   },
   {'insert': 'Load documents from storage'},
   {
     'insert': '\n',
-    'attributes': {'list': 'unchecked'}
+    'attributes': {'list': 'unchecked'},
   },
   {'insert': 'Add new document'},
   {
     'insert': '\n',
-    'attributes': {'list': 'unchecked'}
+    'attributes': {'list': 'unchecked'},
   },
   {'insert': 'Reduce startup time'},
   {
     'insert': '\n',
-    'attributes': {'list': 'unchecked'}
-  }
+    'attributes': {'list': 'unchecked'},
+  },
 ];
 final _docExample2 = [
   {'insert': 'TODO Tulis'},
   {
     'insert': '\n',
-    'attributes': {'header': 3}
+    'attributes': {'header': 3},
   },
   {'insert': 'Rename screen to page'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked'}
+    'attributes': {'list': 'checked'},
   },
   {'insert': 'Create models for'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked'}
+    'attributes': {'list': 'checked'},
   },
   {'insert': 'Window size'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked', 'indent': 1}
+    'attributes': {'list': 'checked', 'indent': 1},
   },
   {'insert': 'Window position'},
   {
     'insert': '\n',
-    'attributes': {'list': 'checked', 'indent': 1}
-  }
+    'attributes': {'list': 'checked', 'indent': 1},
+  },
 ];
 
 final _documents = <int, TextDocument>{
